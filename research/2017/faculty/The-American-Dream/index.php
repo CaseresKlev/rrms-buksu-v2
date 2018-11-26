@@ -1,0 +1,7 @@
+<?php
+
+	//"http://" . $_SERVER['HTTP_HOST'] . "/rrms-buksu/";
+	include($_SERVER["DOCUMENT_ROOT"] . "/rrms-buksu/page_template/research/entry.php");
+	//include $_SERVER["DOCUMENT_ROOT"] . "/rrms-buksu/includes/connection.php";
+	//echo $_SERVER["DOCUMENT_ROOT"];
+?>
