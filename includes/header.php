@@ -1,5 +1,8 @@
 <?php
   include 'path.php';
+  session_start();
+
+  //print_r($_SESSION);
 
   //for including php
   //include($_SERVER["DOCUMENT_ROOT"] . "/rrms-buksu/index.php");
@@ -14,24 +17,42 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!--bootstrap-->
+<script src="<?php echo(PROJECT_ROOT . "js/jquery-3.3.1.js")?> "></script>
+
 <link rel="stylesheet" type="text/css" href="<?php echo(PROJECT_ROOT . "/css/bootstrap-min-4.1.0.css"); ?>">
 <!-- Our Custom CSS -->
 <link rel="stylesheet" href="<?php echo(PROJECT_ROOT . "/css/style.css"); ?>">
 <script defer src="<?php echo(PROJECT_ROOT . "/js/solid.js"); ?>"></script>
-<script defer src="<?php echo(PROJECT_ROOT . "/js/fontawesome.js"); ?>"></script>
+<!--<script defer src="<?php echo(PROJECT_ROOT . "/js/fontawesome.js"); ?>"></script>-->
 
+    <style>
+/* Paste this css to your style sheet file or under head tag */
+/* This only works with JavaScript, 
+if it's not present, don't show loader */
+.no-js #loader { display: none;  }
+.js #loader { display: block; position: absolute; left: 100px; top: 0; }
+.se-pre-con {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;;
+  background: url(<?php echo PROJECT_ROOT . 'img/loader-64x/Preloader_3.gif'?>) center no-repeat #fff;
+}
+</style>
 
 <div class="jumbotron banner">
     <h1 id="banner-name">BukSU - Research Record Management System</h1>      
     <p>Bootstrap is the most popular HTML, CSS, and JS framework for developing responsive, mobile-first projects on the web.</p>
  </div>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#" id="brand" style="display: none">BukSU-RRMS</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow sticky-top">
+  <a class="navbar-brand" href="<?php echo $rootPath  ?>" id="brand" >BukSU-RRMS</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  <div class="collapse navbar-collapse"  id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
         <a class="nav-link" href="<?php echo $rootPath  ?>">Home <span class="sr-only">(current)</span></a>
@@ -61,49 +82,56 @@
 	    			<a class="nav-link" href="#" style="color: yellow;"><i class="fas fa-user fa-lg" style="color: white;" ></i>&#9; Login</a>
 	    	</div>
       	</li>-->
-      	<li class="nav-item dropdown">
 
+        
+      	<li class="nav-item dropdown">
+          
 
       	<?php
       		if(isset($_SESSION['uid'])){
-      			echo '<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: yellow"><i class="fas fa-user fa-lg" style="color: white;" ></i>&#9;' . $accname . '
+      			echo '<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: yellow"><i class="fas fa-user fa-lg" style="color: white;" ></i>&#9;' . $_SESSION['gname'] . '
      	 </a>';
       		}else{
-      			echo '<a class="nav-link" href="new-login.php" id="navbarDropdown" role="button"  style="color: yellow"><i class="fas fa-user fa-lg" style="color: white;" ></i>&#9;Login
+      			echo '<a class="nav-link" href="'. PROJECT_ROOT .'login.php" id="navbarDropdown" role="button"  style="color: yellow"><i class="fas fa-user fa-lg" style="color: white;" ></i>&#9;Login
      	 </a>';
       		}
       	?>
           
 
-         <div class="dropdown-menu " aria-labelledby="navbarDropdown">
+         <div class="dropdown-menu dropdown-menu-right" id="dropdown-menu" aria-labelledby="navbarDropdown">
         	<?php
 					
 
 						if(isset($_SESSION['uid'])){
-							if($acctype==="INSTRUCTOR" || $acctype==="admin"){
-								echo '<a class="dropdown-item" href="admindashboard.php">My Dashboard</a>';
-							}else{
-								echo '<a class="dropdown-item" href="groupdoclist.php?gid='. $_SESSION['uid'] .'">My Research</a>';
-								echo '<a class="dropdown-item" href="userchangepass.php">Change Password</a>';
-							}
-								echo '<a class="dropdown-item" href="logout.php">LOGOUT</a>';
+              $acctype = $_SESSION['type'];
+							if($acctype==="INSTRUCTOR"){
+								echo '<a class="dropdown-item" href="'. PROJECT_ROOT .'user/instructor/dashboard/">My Dashboard</a>';
+							}else if($acctype==="admin"){
+								echo '<a class="dropdown-item" href="'. PROJECT_ROOT .'user/admin/dashboard/">My Dashboard</a>';
+								//echo '<a class="dropdown-item" href="userchangepass.php">Change Password</a>';
+							}else if($acctype==="publisher"){
+                echo '<a class="dropdown-item" href="'. PROJECT_ROOT .'user/publisher/dashboard/">My Dashboard</a>';
+              }else{
+								echo '<a class="dropdown-item" href="'. PROJECT_ROOT .'user/student/dashboard/profile/">My Dashboard</a>';
+              }
+
+              echo '<a class="dropdown-item" href="'. PROJECT_ROOT .'logout.php">LOGOUT</a>';
+              
 					} ?>
         </div>
-        		
-
-        
-        	
-          	
-          	
-          	
-       
       </li>
     </ul>
-
-   
-
   </div>
 </nav>
+<script>
+  
+      $(window).on('load', function () {
+      //alert("Window Loaded");
+      // Animate loader off screen
+      jQuery(".se-pre-con").hide();
+      //$(".se-pre-con").fadeOut("slow");
+ });
+</script>
 
 <!--<div id="wrapper" class="animate">
     <nav class="navbar header-top fixed-top navbar-expand-lg  navbar-dark bg-dark">

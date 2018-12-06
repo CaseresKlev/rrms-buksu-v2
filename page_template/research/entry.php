@@ -36,6 +36,7 @@
     ?>
 </head>
 <body>
+    <div class="se-pre-con"></div>
     <?php
         if($book_id!=""){
             $query = 'SELECT * FROM `book` WHERE `book_id` = ' . $book_id;

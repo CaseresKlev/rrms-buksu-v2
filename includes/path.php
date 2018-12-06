@@ -9,4 +9,5 @@
 	define('PROJECT_ROOT', "http://" . $_SERVER['HTTP_HOST'] . "/rrms-buksu/");
 	//echo PROJECT_ROOT;
 	//echo (PROJECT_ROOT);
+	define("PROJECT_ROOT_NOT_LINK", $_SERVER["DOCUMENT_ROOT"] . "/rrms-buksu/");
 ?>

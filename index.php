@@ -6,8 +6,29 @@
     	include 'includes/header.php';
     	include 'includes/connection.php';
     ?>
+
+    
+
 </head>
+
 <body>
+	<!-- Paste this code after body tag -->
+	<div class="se-pre-con"></div>
+	<!-- Ends -->
+	
+<!--	<div class="content">
+	<div class="back-to-article"><p><a href="smallenvelop.com/blog/"><< Back to the article !!</a></p></div>
+	<img src="http://smallenvelop.com/wp-content/uploads/2014/08/simple-pre-loader.jpg
+" style="visibility: hidden; width:100%; height: auto;">
+	</div>
+	<style>
+		.content {
+			background: url(http://smallenvelop.com/wp-content/uploads/2014/08/simple-pre-loader.jpg
+) center no-repeat;
+			background-size: 100%;
+			width: 100%;
+		}
+	</style>-->
 	<div class="container content">
 		<div id="bs4-slide-carousel" class="carousel slide" data-ride="carousel">
 			<ol class="carousel-indicators">
