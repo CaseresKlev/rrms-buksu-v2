@@ -380,7 +380,7 @@
         });
     </script>
 
-    <script src="<?php echo PROJECT_ROOT . "js/student_dashboard.js" ?>"></script>
+    <script src="<?php echo PROJECT_ROOT . "js/dashboard.js" ?>"></script>
 
     <script type="text/javascript">
       //$('#suf').val($('#suf').val());

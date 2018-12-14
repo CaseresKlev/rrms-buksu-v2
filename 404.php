@@ -6,9 +6,16 @@
            
         </div>
         <center>
-            <h1>404<br>Page not Found..</h1>
+            <h1>404<br>The page you are looking for is not Found on this Server!</h1>
+            	<Button onclick="goBack()">Go back Here</button>
 
         </center>
         
     </div>
 
+    <script>
+	function goBack() {
+    	window.history.go(-2);
+    	//alert("jjj");
+	}
+</script>

@@ -53,9 +53,9 @@
 		}
 
 		if($error){
-			header("Location: " . $_SERVER['HTTP_REFERER'] . $msg . "&alertType=error");
+			header("Location: ../" . $msg . "&alertType=error");
 		}else{
-			header("Location: " . $_SERVER['HTTP_REFERER'] . $msg . "&alertType=success");
+			header("Location: ../" . $msg . "&alertType=success");
 		}
 		$stm->close();
 		$con->close();

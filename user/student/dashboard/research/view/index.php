@@ -1,5 +1,5 @@
 <?php
-
+  
   session_start();
   include($_SERVER["DOCUMENT_ROOT"] . "/rrms-buksu/includes/path.php");
 
@@ -7,10 +7,25 @@
   include PROJECT_ROOT_NOT_LINK . 'server_script/crypt.php';
   if(isset($_SESSION['uid']) && $_SESSION['type']==="STUDENT"){
     //print_r($_SESSION);
+    if(!isset($_GET['book'])){
+      //header("Location: " . dirname( dirname(__FILE__) ));
+     // $str =  dirname( dirname(__FILE__) );
+      header("Location: " . PROJECT_ROOT . "404.php");
+    }
   }else{
     header("Location: " . PROJECT_ROOT );
   }
 
+    //echo $uid;
+  /* if($acctype==="admin"){
+    //echo "Admin ANG NAKALOGIN";
+  }else if($acctype==="INSTRUCTOR"){
+    //echo "Instructor ang naka login";
+
+    header("Location: instructordashboard.php");
+  }else if($acctype==="student"){
+    header("Location: index.php");
+  }*/
     $accname = $_SESSION['gname'];
     $acctype = $_SESSION['type'];
     $uid = $_SESSION['uid'];
@@ -25,18 +40,19 @@
         $author = $result->fetch_assoc();
         //print_r($author);
     }
-    
 
-    //echo $uid;
-  /* if($acctype==="admin"){
-    //echo "Admin ANG NAKALOGIN";
-  }else if($acctype==="INSTRUCTOR"){
-    //echo "Instructor ang naka login";
 
-    header("Location: instructordashboard.php");
-  }else if($acctype==="student"){
-    header("Location: index.php");
-  }*/
+    $stmt = $con->prepare("SELECT book_id FROM `book` WHERE book_id = ?");
+    $stmt->bind_param("i", $_GET['book']);
+    if(!$stmt->execute()){
+      header("Location: " . PROJECT_ROOT . "404.php");
+    }else{
+      $testRes = $stmt->get_result();
+      if($testRes->num_rows===0){
+        header("Location: " . PROJECT_ROOT . "404.php");
+      }
+    }
+
 
 
 
@@ -54,14 +70,14 @@
     <!--bootstrap-->
         <!-- jQuery CDN - Slim version (=without AJAX) -->
     <link rel="stylesheet" type="text/css" href="<?php echo(PROJECT_ROOT . "css/bootstrap-min-4.1.0.css"); ?>">
-    <script src="<?php echo(PROJECT_ROOT . "js/jquery-3.3.1.slim.min.js")?> "></script>
+    <script type="text/javascript" src="<?php echo(PROJECT_ROOT . "js/jquery-3.3.1.js")?>"></script>
+    <!--<script src="<?php echo(PROJECT_ROOT . "js/jquery-3.3.1.slim.min.js")?> "></script>-->
     <script type="text/javascript" src="<?php echo(PROJECT_ROOT . "js/bootstrap.min-4.1.0.js") ?>"></script>
     
     <!-- Our Custom CSS -->
     <link rel="stylesheet" href="<?php echo(PROJECT_ROOT . "css/dashboard.css"); ?>">
     <!-- scrollbar -->
     <link rel="stylesheet" href="<?php echo(PROJECT_ROOT . "css/custom_scroll.css"); ?>">
-
     <script defer src="<?php echo(PROJECT_ROOT . "js/solid.js"); ?>"></script>
     <script defer src="<?php echo(PROJECT_ROOT . "js/fontawesome.js"); ?>"></script>
         <style>
@@ -77,7 +93,6 @@
           background: url(<?php echo PROJECT_ROOT . 'img/loader-64x/Preloader_3.gif'?> ) center no-repeat #fff;
         }
         </style>
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 </head>
 <script type="text/javascript">
           $(window).on('load', function () {
@@ -186,9 +201,18 @@
 
 
            <!---- PLACE YOUR DIVS HERE --->
+           <input type="hidden" name="" id="book_id" value="<?php echo($_GET['book']) ?>">
+           <?php
+              
+              $stmt = $con->prepare("SELECT `book_id`, `book_title`, `abstract`, `pub_date`, `department`, `keywords`, `status`, `cover`,`docloc`, `dowloadable`  FROM `book` WHERE book_id=?;");
+              $stmt->bind_param("i", $_GET['book']);
+              $stmt->execute();
+              $result = $stmt->get_result();
+              $bookDet = $result->fetch_assoc();
+            ?>
 
-           <?php  
-            if(isset($_GET[',msg'])){
+            <?php  
+            if(isset($_GET['msg'])){
 
               $alertType = "info";
               if(isset($_GET['alertType'])){
@@ -196,104 +220,447 @@
               }
               //echo "$alertType";
               echo '
-              <div class="bg-'. $alertType .' text-center text-white rounded" style="">
+              <div class="bg-'. $alertType .' text-center text-white rounded" style="margin-bottom: 40px;">
                <!--<span class="closebtn" onclick="this.parentElement.style.display=\'none\';">&times;</span>-->
                <button type="button" class="close btn-danger" style="margin-right: 10px;" onclick="this.parentElement.style.display=\'none\'"; aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
-               '. $_GET['updateProfileMessage'] .'
+               '. $_GET['msg'] .'
            </div>';
             }
 
            ?>
+           <div class="container">
+            <form enctype="multipart/form-data" id="myForm" action="validate/">
+            <div class="row">
+              <div class="col-md-3 col-sm-12 leftContent">
+                 <img src="<?php echo  (PROJECT_ROOT . "research/2018/student/cover/5b98b3aed8a385.66287600.jpg")?>" id="cover-img">
+                 <div class="row">
+                  <div class="badge form-control btn-warning " style="width:  80%; margin: auto; margin-top: 10px; margin-bottom: 20px; font-size: 12pt;">Change cover</div>
+                 </div>
+                 <div class="container data-group leftControl" >
+                    <div class="row bg-secondary text-white data-head">
+                      File:
+                      <div class="badge badge-warning ml-auto" id="btn-edit-file" style="margin: auto; margin-right: 10px;"><i class="fas fa-pencil-alt"></i></div>
+                    </div>
+                    <div class="row data-content">
+                      <div class="text onViewDepartment">
+                        myfile.pdf
+                      </div>
+                    </div>
+                  </div>
+                  <div class="container data-group leftControl">
+                    <div class="row bg-secondary text-white data-head" style="padding-right: 5px;">
+                      Downloadable:
+                      <label class="switch ml-auto" >
+                        <?php
 
-  
+                          if($bookDet['dowloadable']==1){
+                            echo '<input type="checkbox" id="btn-downloadable" checked>';
 
-      <div class="container custom-content" id="myProfile">
-        <div class="row">
-          <div class="btn btn-warning ml-auto" id="btn-editProfile"style="margin: 15px 0px 0px 0px">Edit profile</div>
-        </div>
-        <div class="container data-group">
-               <div class="row bg-secondary text-white data-head">
-                        Tittle:
-               </div>
-               <div class="row data-content">
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-               </div>
-            </div>
-            <div class="container data-group">
-               <div class="row bg-secondary text-white data-head">
-                        Author(s):
-               </div>
-               <div class="row data-content">
-                <ul>
-                  <li>  
-                    <a href="<?php echo PROJECT_ROOT . "author/?aut_id=2"?>">Klevie Jun R. Caseres</a>
-                  </li>
-                  <li>  
-                    <a href="<?php echo PROJECT_ROOT . "author/?aut_id=2"?>">Klevie Jun R. Caseres</a>
-                  </li>
-                </ul>
-               </div>
-            </div>
-            <div class="container data-group">
-               <div class="row bg-secondary text-white data-head">
-                        Date Submitted:
-               </div>
-               <div class="row data-content">
-                    December 21, 2018
-               </div>
-            </div>
-            <div class="container data-group">
-               <div class="row bg-secondary text-white data-head">
-                        Department:
-               </div>
-               <div class="row data-content">
-                    Information Technology - College of Arts and Sciences
-               </div>
-            </div>
-            <div class="container data-group">
-               <div class="row bg-secondary text-white data-head">
-                        Status:
-               </div>
-               <div class="row data-content">
-                    Unpublished
-               </div>
-            </div>
-            <div class="container data-group">
-               <div class="row bg-secondary text-white data-head">
-                        Abstract:
-               </div>
-               <div class="row data-content">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-               </div>
-            </div>
-            <div class="container data-group">
-               <div class="row bg-secondary text-white data-head">
-                        Keywords:
-               </div>
-               <div class="row data-content">
-                   <a href="<?php echo PROJECT_ROOT . "research/?key=" . "Naruto" ?>">Naruto</a> , &nbsp; <a href="<?php echo PROJECT_ROOT . "research/?key=" . "Naruto" ?>">Research Management</a>
-               </div>
-            </div>
-            <div class="container data-group">
-               <div class="row bg-secondary text-white data-head">
-                        History:
-               </div>
-               <div class="row data-content">
-                   <ul>
-                     <li>Submitted on January 31, 2018</li>
-                   </ul>
-               </div>
-            </div>
+                          }else{
+                            echo '<input type="checkbox" id="btn-downloadable">';
+                          }
+                        ?>
+                          
+                          <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="row data-content">
+                      <div class="text onViewDepartment">
+                        <span id="download-msg">
+                          <?php  
+                            if($bookDet['dowloadable']==1){
+                              echo 'The file is Downloadable by others.';
+                            }else{
+                              echo 'Your file is not downloadable by others.';
+                            }  
+                          ?>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
 
+              </div>
+              <div class="col-md-9 rightContent">
+                
+                  <div class="container data-group" style="padding-top: 0px;">
+                    <div class="row bg-secondary text-white data-head">
+                      Title:
+                      <div  class="badge badge-warning ml-auto" id="btn-edit-title" style="margin: auto; margin-right: 10px;"><i class="fas fa-pencil-alt"></i> Edit</div>
+                    </div>
+                    <div class="row data-content">
+                      <div class="text title"><?php echo $bookDet['book_title']; ?></div>
+                    </div>
+                  </div>
+                  <div class="container data-group">
+                    <div class="row bg-secondary text-white data-head">
+                      Author(s):
+                      <div  class="badge badge-warning ml-auto" id="btn-edit-author" style="margin: auto; margin-right: 10px;"><i class="fas fa-pencil-alt"></i> Edit</div>
+                    </div>
+                    <div class="row data-content">
+                      <div class="row onViewAuthor">
+                        <ul>
+                          <?php
+              
+                            $stmt = $con->prepare('SELECT author.a_id, author.a_fname, CONCAT(author.a_fname, " ", SUBSTRING(author.a_mname, 1, 1), ". ", author.a_lname, " " , author.a_suffix) as name FROM `junc_authorbook` INNER JOIN author on author.a_id = junc_authorbook.aut_id WHERE book_id = ?');
+                            $stmt->bind_param("i", $_GET['book']);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            while ($row=$result->fetch_assoc()) {
+                              echo '<li>'.$row['name'] .'</li>';
+                            }
+                          ?>
+
+
+                          
+                        </ul>
+                         
+                        <?php
+                          $isremoved = $con->query('SELECT id, referer as referer_id, CONCAT(a1.a_fname, " ", SUBSTRING(a1.a_mname,1,1), ". ", a1.a_lname) as name, `action`, CONCAT(a2.a_fname, " ", SUBSTRING(a2.a_mname,1,1), ". ", a2.a_lname) as referer, `date` FROM `on_update_author` JOIN author a1 on a1.a_id = `author` JOIN author a2 on a2.a_id = `referer` WHERE book_id = '. $_GET['book'] .' ORDER BY date DESC');
+                              $isAction = "";
+                              $by = "";
+                              if($isremoved->num_rows>0){
+                                echo '<div class="note" style="margin-left: 10px;"> <b class="badge-danger" style="padding: 0px  5px 0px 5px;">Pending:</b>
+                        <ul class="text-secondary">';
+                                while ($isRemoveRow=$isremoved->fetch_assoc()) {
+                                  $date = new DateTime($isRemoveRow['date']);
+                                  echo '<li><b>'. $isRemoveRow['name'] .'</b> was <b>'. $isRemoveRow['action'] .'</b> as Author to this research by '. $isRemoveRow['referer'] .' last '. $date->format('F jS, Y');
+                                  
+                                  if($isRemoveRow['referer_id']==$_SESSION['owner']){
+                                    echo '<a href="#" id="link-remove-author" onclick="removeRequest('. $isRemoveRow['id'].')"><br>Cancel Request</a>';
+                                  }
+
+                                   echo '</li>';
+                                }
+                                echo '</ul>
+                        </div>';
+                              }
+
+                        ?>
+                       
+                          
+                            
+                          
+                        
+                      </div>
+                      <div class="container onEditAuthor">
+                        <div class="row">
+                          <?php 
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            while($row=$result->fetch_assoc()){
+                              if($_SESSION['owner']!==$row['a_id']){
+                                 echo '<div class="input-group mb-3">
+                                      <input type="text" class="form-control onEdit" aria-label="Recipient\'s username" aria-describedby="basic-addon2" value="'. $row['name'] .'" id="author-5" readonly>
+                                      <div class="input-group-append">
+                                        <div class="btn btn-outline-danger" type="button" onclick="removeAuthor('. $row['a_id'].', \''. $row['name'].'\')"><i class="fas fa-trash-alt"></i></div>
+                                      </div>
+                                    </div>';
+                              }
+                             
+                            }
+
+
+                          ?>
+                          
+                          <div class="input-group mb-3">
+                            <input type="text" class="form-control onEdit txt-searchAuthor"  placeholder="Search Author to Add" aria-label="Recipient's username" aria-describedby="basic-addon2" >
+                            <div class="input-group-append">
+                              <div class="btn btn-outline-success" id="btnSearchAuthor" type="button"><i class="fas fa-search"></i></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="container data-group">
+                    <div class="row bg-secondary text-white data-head">
+                      Department:
+                      <div class="badge badge-warning ml-auto" id="btn-edit-department" style="margin: auto; margin-right: 10px;"><i class="fas fa-pencil-alt"></i> Edit</div>
+
+                    </div>
+                    <div class="row data-content">
+                      <div class="text onViewDepartment departmentID"><?php  echo $bookDet['department']; ?></div>
+
+                      <div class="form-group">
+                        <label for="department" id="label-department" style="display: none;">Select Department</label>
+                        <select class="form-control onEdit" id="department" name="department">
+                        <?php  
+                          $result=$con->query("SELECT * FROM `department` where id!=20 ORDER by college asc");
+                          echo $result->num_rows;
+                          if($result->num_rows>0){
+                            while ($row=$result->fetch_assoc()) {
+                              echo '<option value="'. $row['id'] .'">'. $row['college'] .' - '. $row['cat_name'] .'</option>';
+                            }
+                          }
+
+                        ?>
+                        
+                      </select>
+                      </div>
+                      <script type="text/javascript">
+                        
+                      </script>
+                      
+                    </div>
+                  </div>
+                  <div class="container data-group">
+                    <div class="row bg-secondary text-white data-head">
+                      Keywords:
+
+                      <div class="badge badge-warning ml-auto" id="btn-edit-keywords" style="margin: auto; margin-right: 10px;"><i class="fas fa-pencil-alt"></i> Edit</div>
+                      <div class="badge badge-success ml-auto d-none" id="btn-edit-keywords-save" style="margin: auto; margin-right: 10px;"><i class="fas fa-save"></i> Save</div>
+                    </div>
+                    <div class="row data-content">
+                      <div class="text onView edit-Keywords">
+                        <?php echo $bookDet['keywords']; ?>
+                      </div>
+                      <div class="note text-white badge-info d-none" id="kw-hint">Pls. Separate with Comma</div>
+                      <textarea rows="5" class="form-control onEdit" id="keywords"><?php echo $bookDet['keywords']; ?></textarea>
+                    </div>
+                  </div>
+                  <div class="container data-group">
+                    <div class="row bg-secondary text-white data-head">
+                      Abstract:
+                      <div class="badge badge-warning ml-auto" id="btn-edit-abstract" style="margin: auto; margin-right: 10px;"><i class="fas fa-pencil-alt"></i> Edit</div>
+                      <div class="badge badge-success ml-auto d-none" id="btn-edit-abstract-save" style="margin: auto; margin-right: 10px;"><i class="fas fa-save"></i> save</div>
+                    </div>
+                    <div class="row data-content">
+                      <div class="text onView" id="edit-abstract">
+                        <?php echo $bookDet['abstract']; ?>
+                      </div>
+                      <textarea rows="8" class="form-control onEdit" id="abstract" ><?php echo $bookDet['abstract']; ?></textarea>
+                    </div>
+                  </div>
+                  <div class="container data-group">
+                    <div class="row bg-secondary text-white data-head">
+                      References:
+                      <div class="badge badge-primary ml-auto" id="btn-edit-reference" style="margin: auto; margin-right: 10px;"><i class="fas fa-plus"></i> Add</div>
+                      
+                    </div>
+                    <div class="row data-content" >
+
+                      <?php 
+                        $ref = $con->query("SELECT ref.id as ref_id, junk_bookref.id as junction_id, ref.reftitle as title, ref.link as link FROM `junk_bookref` inner JOIN ref on ref.id = webref_id WHERE book_id = " . $_GET['book']);
+                        if($ref->num_rows>0){
+                          $refCount = 1;
+                          while($refrow=$ref->fetch_assoc()){
+                            echo '<div class="container ref-container">
+                        <div class="row data-content" style="margin-left: 5px;">
+                          <div class="col-md-10 col-sm-10">
+                            <div class="row h6">'. $refrow['title'] .' </div>
+                            <div class="row h6">
+                              <small>
+                                <a href="'. $refrow['link'] .'">'. $refrow['link'] .'</a>
+                              </small>
+                            </div>
+                          </div>
+                          <div class="col-md-2 col-sm-2">
+                            <div class="badge badge-warning ml-auto" onclick="removeEditRef('. $refrow['ref_id'] .', \'edit\')" style="margin: auto; font-size: 10pt;">
+                              <i class="fas fa-pencil-alt"></i>
+                            </div>';
+
+                            if($refCount!=1){
+
+                              echo'
+                            <div class="badge badge-danger ml-auto" id="btn-del-ref" onclick="removeEditRef('. $refrow['ref_id'] .', \'delete\');" style="margin: auto; font-size: 10pt;">
+                              <i class="fas fa-trash-alt"></i>
+                            </div>';
+
+                            }
+                            $refCount = 2;
+                          echo'
+                          </div>
+                        </div>
+                      </div>';
+                          }
+                        }
+
+                      ?>
+                      
+                      <!--template for reference-->
+                      <!--<div class="container ref-container">
+                        <div class="row data-content" style="margin-left: 5px;">
+                          <div class="col-md-10 col-sm-10">
+                            <div class="row h6">Satalkar, B. (2010, July 15). Water aerobics. </div>
+                            <div class="row h6"><small><a href="http://www.buzzle.com/fsgehfbhsfnjsef/hefbsegfse/fsebfhbseffse.html">http://www.buzzle.com/fsgehfbhsfnjsef/hefbsegfse/fsebfhbseffse.html</a></small></div>
+                          </div>
+                          <div class="col-md-2 col-sm-2">
+                            <div class="badge badge-warning ml-auto" style="margin: auto; font-size: 10pt;"><i class="fas fa-pencil-alt"></i></div>
+                            <div class="badge badge-danger ml-auto" id="btn-del-ref" onclick="removeRef(1);" style="margin: auto; font-size: 10pt;"><i class="fas fa-trash-alt"></i></div>
+                          </div>
+                        </div>
+                      </div>-->
+                    </div>
+                  </div>
+                  <div class="container data-group">
+                    <div class="row bg-secondary text-white data-head">
+                      Submitted on:
+                    </div>
+                    <div class="row data-content">
+                      <div class="text onView edit-Keywords">
+                        January 31, 2018
+                      </div>
+                    </div>
+                  </div>
+                  <div class="container data-group">
+                    <div class="row bg-secondary text-white data-head">
+                      Research History:
+                    </div>
+                    <div class="row data-content">
+                      <div class="text onView edit-Keywords">
+                        <ul>
+                          <li>Published at CHED Accredited Journal last September 18, 2017</li>
+                          <li>Submitted on: January 31, 2018</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="container data-group">
+                    <div class="row bg-secondary text-white data-head">
+                      Awards:
+                    </div>
+                    <div class="row data-content" style="margin-bottom: 40px;">
+                      <div class="text onView edit-Keywords">
+                        <ul>
+                          <li>Awarded as <em><b>Best Paper</b></em> during the <b>Asian Awards for Oral Research Presentation</b> at Bukidnon State University Malaybalay City last June 16, 2016</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div> 
+            </div>
            </div>
-    
 
-           
-           	
-           
-             
+
+
+        </form>
+
+            <!-- modal title-->
+                  <input type="hidden" name="">
+                  <div class="modal fade " id="modalEditText" role="dialog">
+                    <div class="modal-dialog">
+
+                      <!-- Modal content-->
+                      <div class="modal-content">
+                        <div class="modal-header" style="padding: 10px">
+
+                          <h4 class="modal-title " id="modal-title-pub">Edit Title</h4>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <form id="form-published" action="validate/title.php" method="POST">
+                          <div class="modal-body">
+                              <input type="hidden" name="bookid" value="<?php echo($_GET['book']) ?>">
+                              <div class="form-group">
+                                <label for="txt-title">Title: <em style="color: red">*</em></label>
+                                <textarea type="text/number" rows="5" placeholder="Title" class="form-control edited_title" name="txt-title"  class="form-control" style= "font-family: Century Gothic; font-size: 13pt;" required></textarea>
+                              </div>
+                          </div>
+                        <div class="modal-footer">
+                          <button type="submit" value="Save Changes" class="btn btn-primary ml-auto"> Save </button>
+                        </div>
+                        </form>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <!-- modal title-->
+                  <div class="modal fade" id="modalAuthor" role="dialog">
+                    <div class="modal-dialog">
+
+                      <!-- Modal content-->
+                      <div class="modal-content">
+                        <div class="modal-header">
+
+                          <h5 class="modal-title" id="modal-title-pub">Remove Author</h5>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <form id="form-published" id="form-author-add-delete" action="validate/author.php" method="POST">
+                          <div class="modal-body">
+                              <input type="hidden" name="author" id="author" value="remove-6-2">
+                              <h6 class="text-danger">Are you sure you want to remove <b id="displayName">Allen Mie S. Bangud</b> as Athor for this research?</h6>
+                              <br>
+                              <br>
+                              <em class="text-white badge-danger note">Note: No changes will be applied until <b id="displayName2">Allen Mie</b> approved your action.</em>
+                          </div>
+                        <div class="modal-footer">
+                          <button type="submit" value="Save Changes" id="submit-author" class="btn btn-primary ml-auto"> Yes </button>
+                        </div>
+                        </form>
+                      </div>
+
+                    </div>
+                  </div>
+
+
+                  <div class="modal fade" id="modalAuthorADD" role="dialog">
+                    <div class="modal-dialog">
+
+                      <!-- Modal content-->
+                      <div class="modal-content">
+                        <div class="modal-header">
+
+                          <h5 class="modal-title" id="modal-title-pub">Add Author</h5>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                          <table class="table table-striped border-5" >
+                            <thead>
+                              <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Action</th>
+                              </tr>
+                            </thead>
+                            <tbody id="author-search-list">
+                            </tbody>
+                          </table>
+                        
+                          <em class="text-white badge-danger note">Note: No changes will apply unless the author you are trying to add confirms your action.</em>
+                        
+                        <div class="modal-footer">
+                          <button type="submit" value="Save Changes" class="btn btn-primary ml-auto" data-dismiss="modal"> Ok </button>
+                        </div>
+                        
+                      </div>
+
+                    </div>
+                  </div>
+                  
+                 <!--modal edit reference-->
+                 <div class="modal fade" id="modalAddEditRef" role="dialog">
+                    <div class="modal-dialog">
+
+                      <!-- Modal content-->
+                      <div class="modal-content">
+                        <div class="modal-header">
+
+                          <h5 class="modal-title" id="modal-title-pub">Edit reference</h5>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                          
+                        <form action="validate/reference.php" method="POST">
+                          <div class="modal-body">
+                            <div class="form-group">
+                            <label for="ref-title">Reference: <span class="badge-warning">*(APA Format)</span></label>
+                            <input type="text" class="form-control" name="ref-title" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="ref-title">Reference Link:</label>
+                            <input type="text" class="form-control" name="ref-link">
+                          </div>
+                          </div>
+                          
+                          
+                       
+                         
+                        <div class="modal-footer">
+                          <input   type="submit" value="Submit" class="btn btn-primary"> 
+                        </div>
+                         </form>
+                      </div>
+
+                    </div>
+                  </div>
                    
            <!---- AYAW NAG LAPAS DIRI --->
         </div>
@@ -314,13 +681,16 @@
         });
     </script>
 
-    <script src="<?php echo PROJECT_ROOT . "js/student_dashboard.js" ?>"></script>
+     
+    <script src="<?php echo PROJECT_ROOT . "js/dashboard.js" ?>"></script>
 
     <script type="text/javascript">
       //$('#suf').val($('#suf').val());
-      var s = $('#suf-val').val();
-      $('#suf').val(s).change();
-      //alert(s);
+      //var s = $('.departmentID').html();
+      $('#department').val(<?php echo $bookDet['department']; ?>).change();
+      $('.departmentID').html($('#department option:selected').html());
+
+      //alert($('#department').text());
     </script>
 </body>
 </html>
