@@ -234,19 +234,28 @@
             <form enctype="multipart/form-data" id="myForm" action="validate/">
             <div class="row">
               <div class="col-md-3 col-sm-12 leftContent">
-                 <img src="<?php echo  (PROJECT_ROOT . "research/2018/student/cover/5b98b3aed8a385.66287600.jpg")?>" id="cover-img">
+                 <img src="<?php echo  PROJECT_ROOT . $bookDet['cover']  ?>" id="cover-img">
                  <div class="row">
-                  <div class="badge form-control btn-warning " style="width:  80%; margin: auto; margin-top: 10px; margin-bottom: 20px; font-size: 12pt;">Change cover</div>
+                  <div class="badge form-control btn-warning" id="btn-edit-cover" style="width:  80%; margin: auto; margin-top: 10px; margin-bottom: 20px; font-size: 12pt;">Change cover</div>
                  </div>
                  <div class="container data-group leftControl" >
                     <div class="row bg-secondary text-white data-head">
                       File:
-                      <div class="badge badge-warning ml-auto" id="btn-edit-file" style="margin: auto; margin-right: 10px;"><i class="fas fa-pencil-alt"></i></div>
+                      <div class="badge badge-warning ml-auto" id="btn-edit-file" style="margin: auto; margin-right: 10px;"><i class="fas fa-pencil-alt"></i> Change File</div>
                     </div>
                     <div class="row data-content">
-                      <div class="text onViewDepartment">
-                        myfile.pdf
+                      <a href="<?php  echo 'http://'. $_SERVER['HTTP_HOST'] . PROJECT_FOLDER . $bookDet['docloc'] ?>" target="_blank">
+                      <div class="text onViewDepartment" style="font-size: 10pt;">
+                        <?php 
+                        //echo $bookDet['docloc'];
+                        $doc = explode("/", $bookDet['docloc']);
+                        echo $doc[count($doc) - 1]; 
+
+
+
+                        ?>
                       </div>
+                      </a>
                     </div>
                   </div>
                   <div class="container data-group leftControl">
@@ -436,7 +445,7 @@
                   <div class="container data-group">
                     <div class="row bg-secondary text-white data-head">
                       References:
-                      <div class="badge badge-primary ml-auto" id="btn-edit-reference" style="margin: auto; margin-right: 10px;"><i class="fas fa-plus"></i> Add</div>
+                      <div class="badge badge-primary ml-auto" id="btn-edit-reference" style="margin: auto; margin-right: 10px;" onclick="removeEditRef('','',0, 'add')"><i class="fas fa-plus"></i> Add</div>
                       
                     </div>
                     <div class="row data-content" >
@@ -452,19 +461,19 @@
                             <div class="row h6">'. $refrow['title'] .' </div>
                             <div class="row h6">
                               <small>
-                                <a href="'. $refrow['link'] .'">'. $refrow['link'] .'</a>
+                                <a href="'. $refrow['link'] .'" target="_blank">'. $refrow['link'] .'</a>
                               </small>
                             </div>
                           </div>
                           <div class="col-md-2 col-sm-2">
-                            <div class="badge badge-warning ml-auto" onclick="removeEditRef('. $refrow['ref_id'] .', \'edit\')" style="margin: auto; font-size: 10pt;">
+                            <div class="badge badge-warning ml-auto" onclick="removeEditRef( \''. $refrow['title'] .'\', \''. $refrow['link'] . '\', '. $refrow['ref_id'] .', \'edit\')" style="margin: auto; font-size: 10pt;">
                               <i class="fas fa-pencil-alt"></i>
                             </div>';
 
                             if($refCount!=1){
 
                               echo'
-                            <div class="badge badge-danger ml-auto" id="btn-del-ref" onclick="removeEditRef('. $refrow['ref_id'] .', \'delete\');" style="margin: auto; font-size: 10pt;">
+                            <div class="badge badge-danger ml-auto" id="btn-del-ref" onclick="removeEditRef(\'\', \'\', '. $refrow['ref_id'] .', \'delete\');" style="margin: auto; font-size: 10pt;">
                               <i class="fas fa-trash-alt"></i>
                             </div>';
 
@@ -500,7 +509,10 @@
                     </div>
                     <div class="row data-content">
                       <div class="text onView edit-Keywords">
-                        January 31, 2018
+                        <?php 
+                          $date = new DateTime($bookDet['pub_date']);
+                          echo $date->format('F jS, Y');
+                         ?>
                       </div>
                     </div>
                   </div>
@@ -511,8 +523,32 @@
                     <div class="row data-content">
                       <div class="text onView edit-Keywords">
                         <ul>
-                          <li>Published at CHED Accredited Journal last September 18, 2017</li>
-                          <li>Submitted on: January 31, 2018</li>
+                          <?php  
+
+
+                            $result = $con->query("SELECT `book_stat`, `date` FROM `bookhistory` WHERE book_id = " . $_GET['book']);
+                            if($result->num_rows>0){
+
+                                while ($row = $result->fetch_assoc()) {
+                                  echo "<li>";
+                                   $date = new DateTime($row['date']);
+
+                                    if($row['book_stat']==="Unpublished"){
+                                      
+                                      echo "Submitted on " . $date ->format('F jS, Y');
+                                    }else{
+                                      echo $row['book_stat'] . " on " . $date ->format('F jS, Y');
+                                    }
+                                   echo "</li>";
+                                }
+                            }
+                            
+
+                            
+                           
+                            
+                            
+                          ?>
                         </ul>
                       </div>
                     </div>
@@ -524,7 +560,22 @@
                     <div class="row data-content" style="margin-bottom: 40px;">
                       <div class="text onView edit-Keywords">
                         <ul>
-                          <li>Awarded as <em><b>Best Paper</b></em> during the <b>Asian Awards for Oral Research Presentation</b> at Bukidnon State University Malaybalay City last June 16, 2016</li>
+                          
+                          <?php 
+
+                            $result = $con->query("SELECT `awards`, `parties`, `location`, `date` FROM `awards` WHERE book_id = " . $_GET['book']);
+                            if($result->num_rows>0){
+                              while ($row=$result->fetch_assoc()) {
+                                echo "<li>";
+                                $date = new DateTime($row['date']);
+                                  echo "Awarded as <em><b>" . $row['awards'] . "</b></em> during the <b>" . $row['parties'] . "</b> at " . $row['location'] . " last " . $date->format('F jS Y');
+
+                                echo "</li>";
+                              }
+                            }
+
+
+                           ?>
                         </ul>
                       </div>
                     </div>
@@ -634,20 +685,30 @@
                       <div class="modal-content">
                         <div class="modal-header">
 
-                          <h5 class="modal-title" id="modal-title-pub">Edit reference</h5>
+                          <h5 class="modal-title" id="modal-addAuthor-title">Edit reference</h5>
                           <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                           
                         <form action="validate/reference.php" method="POST">
+                          <input type="text" name="b_id" class="d-none" value="<?php  echo $bookDet['book_id'] ?>">
+                          <input type="number" class="d-none" name="form-ref-id" id="form-ref-id" value="0">
                           <div class="modal-body">
-                            <div class="form-group">
-                            <label for="ref-title">Reference: <span class="badge-warning">*(APA Format)</span></label>
-                            <input type="text" class="form-control" name="ref-title" required>
-                          </div>
-                          <div class="form-group">
-                            <label for="ref-title">Reference Link:</label>
-                            <input type="text" class="form-control" name="ref-link">
-                          </div>
+                            <div class="form-group option1">
+                              <label for="ref-title">Reference: <span class="badge-warning note">*(APA Format)</span></label>
+                              <textarea class="form-control"  name="ref-title" id="ref-title" rows="3"></textarea>
+                            </div>
+                            <div class="form-group option1">
+                              <label for="ref-title">Reference Link:</label>
+                              <input type="text" class="form-control" name="ref-link" id="ref-link" required>
+                            </div>
+                            <div class="form-group option2" style="display: none">
+                              <label for="ref-title">Insert Local Citation Key: <span class="btn-warning note">Paper that found on this Server</span></label>
+                              <input type="text" class="form-control" name="ref-citation" id="ref-citation" placeholder="Ex: Un5lAdageHbLgKUhF8aLklshoq6BjxDR" required="">
+                            </div>
+                            <div class="form-group option-select">
+                              <input type="checkbox" name="use-citation" id="use-citation">
+                              <label for="use-citation">I will add Citation Key instead</label>
+                            </div>
                           </div>
                           
                           
@@ -662,6 +723,38 @@
                     </div>
                   </div>
                    
+                   <div class="modal fade" id="modalFileUpload" role="dialog">
+                    <div class="modal-dialog">
+
+                      <!-- Modal content-->
+                      <div class="modal-content">
+                        <div class="modal-header">
+
+                          <h5 class="modal-title" id="modal-fileUpload-title">Change File</h5>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                          
+                        <form action="validate/upload.php" method="POST" enctype="multipart/form-data">
+                          <input type="text" name="b_id" class="d-none" value="<?php  echo $bookDet['book_id'] ?>">
+                          <input type="number" class="d-none" name="form-ref-id" id="form-ref-id" value="0">
+                          <div class="modal-body">
+                            <input type="number" name="book_id" class="d-none" value="<?php echo $_GET['book'] ?>">
+                            <input type="text" class="d-none" name="file-action" id="file-action" value="file">
+                            <div class="form-group option1">
+                              <label for="file-title" id="file-title">Choose file to Upload: <span id="uploadFile-note" class="badge-danger note">*(PDF Format - Max File size 50MB)</span></label>
+                              <input type="file" name="file" id="file-upload" accept="application/pdf" required>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <input   type="submit" value="Submit" class="btn btn-primary"> 
+                          </div>
+                         </form>
+                      </div>
+
+                    </div>
+                  </div>
+
+
            <!---- AYAW NAG LAPAS DIRI --->
         </div>
 

@@ -10,4 +10,5 @@
 	//echo PROJECT_ROOT;
 	//echo (PROJECT_ROOT);
 	define("PROJECT_ROOT_NOT_LINK", $_SERVER["DOCUMENT_ROOT"] . "/rrms-buksu/");
+	define("PROJECT_FOLDER", "/rrms-buksu/");
 ?>

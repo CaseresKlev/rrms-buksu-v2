@@ -128,6 +128,24 @@ $('#btn-edit-abstract').click(function(){
 	$(this).hide();
 })
 
+$('#btn-edit-file').click(function(){
+	$('#file-upload').attr("accept", "application/pdf");
+	$('#uploadFile-note').html("*(PDF Format - Max file size 50MB)");
+	$('#modal-fileUpload-title').html("Change File");
+	$('#file-action').val("file");
+	$('#modalFileUpload').modal("toggle");
+})
+
+$('#btn-edit-cover').click(function(){
+	$('#file-upload').attr("accept", ".png, .jpg, .jpeg");
+	$('#uploadFile-note').html("*(JPEG, JPG or PNG Format - Max file size 2MB)");
+	$('#modal-fileUpload-title').html("Change Cover");
+	$('#file-action').val("cover");
+	$('#modalFileUpload').modal("toggle");
+})
+	
+
+
 $('#btn-edit-abstract-save').click(function(){
 	var abs = $('#abstract').val();
 	if(abs!=""){
@@ -149,18 +167,52 @@ $('#btn-downloadable').click(function(){
 })
 
 $('#btn-del-reffvgbhjk').click(function(){
-	alert("k");
+	
 })
 
-function removeEditRef(index, action){
-	
+function removeEditRef(title, link, index, action){
+	//alert(title);
 	if(action=="delete"){
 		saveUpdate(index + "-" + action, "references");
-	}else{
+	}else if(action=="edit"){
+
+		$("#modal-addAuthor-title").html("Edit Reference");
+		$('#ref-link').val(link);
+		$('#ref-title').html(title);
+		$('#form-ref-id').val(index);
 		$('#modalAddEditRef').modal("toggle");
+		$('#ref-citation').val("--empty-null--");
+		$('.option-select').hide();
+	}else{
+		$("#modal-addAuthor-title").html("Add new Reference");
+		$('#ref-link').val("");
+		$('#ref-title').html("");
+		$('#form-ref-id').val(0);
+		$('.option-select').show();
+		$('#ref-citation').val("--empty-null--");
+		$('#modalAddEditRef').modal("toggle");
+		//alert("add");
 	}
 	//
 }
+
+$('#use-citation').click(function(){
+	if($(this).is(':checked')){
+		$('.option1').hide();
+		$('.option2').show();
+		$('#form-ref-id').val(-1);
+		$('#ref-link').val("--empty-null--");
+		$('#ref-title').html("--empty-null--");
+		$('#ref-citation').val("");
+	}else{
+		$('.option1').show();
+		$('.option2').hide();
+		$('#form-ref-id').val(0);
+		$('#ref-citation').val("--empty-null--");
+		$('#ref-link').val("");
+		$('#ref-title').html("");
+	}
+})
 
 $('#btnSearchAuthor').click(function(){
 	var book_id = $('#book_id').val();
@@ -205,7 +257,7 @@ $('#btnSearchAuthor').click(function(){
 function addEditAuthor(id, action){
 	var book_id = $('#book_id').val();
 	var author = action +"-"+ id+ "-" + book_id;
-	alert(author);
+	//alert(author);
 	$('#author').val(author);
 	$('#submit-author').trigger("click");
 	
