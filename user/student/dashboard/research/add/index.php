@@ -1,8 +1,18 @@
 <?php
 
-  $currentDIR =  basename(__DIR__);
+  session_start();
+  $currentDIR =  "research";
   include($_SERVER["DOCUMENT_ROOT"] . "/rrms-buksu/includes/path.php");
-  include PROJECT_ROOT_NOT_LINK . "user/student/dashboard/preload.php";
+
+  include PROJECT_ROOT_NOT_LINK . 'includes/connection.php';
+  include PROJECT_ROOT_NOT_LINK . 'server_script/crypt.php';
+  if(isset($_SESSION['uid']) && $_SESSION['type']==="STUDENT"){
+    //print_r($_SESSION);
+  }else{
+    header("Location: " . PROJECT_ROOT );
+  }
+  
+
 
     $accname = $_SESSION['gname'];
     $acctype = $_SESSION['type'];
@@ -67,7 +77,7 @@
           top: 0px;
           width: 100%;
           height: 100%;
-          z-index: 9999;;
+          z-index: 9999;
           background: url(<?php echo PROJECT_ROOT . 'img/loader-64x/Preloader_3.gif'?> ) center no-repeat #fff;
         }
         </style>
@@ -89,48 +99,60 @@
 	<div class="wrapper">
         <!-- Sidebar  -->
         
-         <?php  include PROJECT_ROOT_NOT_LINK . "user/student/dashboard/sidebar.php"  ?>
+        <?php  include PROJECT_ROOT_NOT_LINK . "user/student/dashboard/sidebar.php"  ?>
 
         <!-- Page Content  -->
-        <div id="content">
+
+
+        <div id="content" class="pb-5">
           <!-- Toggle Menu  -->
             <?php include PROJECT_ROOT_NOT_LINK . "user/student/dashboard/toggle_menu.php"; ?>
 
 
            <!---- PLACE YOUR DIVS HERE --->
-           
-           <div class="container" style="padding-bottom: 15px; background-color: #e1e1d0; min-height: 80%;">
-            <div class="row bg-dark text-white data-head">
-              My Researches
-              <a href="add/" class="badge badge-success ml-auto" style="margin: auto; margin-right: 10px;"><i class="fas fa-plus"></i> Add</a>
-            </div>
-              <?php
-            if($result->num_rows>0){
-              while ($row=$result->fetch_assoc()) {
-                echo '<div class="container research-entry" >
-            <div class="row title bg-info">
-              <div class="col-md-10 col-sm-10 left-holder text-white"  >
-              "'. $row['book_title'] .'"
-              </div>
-              <div class="col-md-2 col-sm-2 button-holder" >
-                <a href="view/?book='. $row['book_id'] .'" class="badge badge-light mr-auto"><i class="fas fa-eye"></i> View</a>
-                <a href="view/?book='. $row['book_id'] .'" class="badge badge-warning mr-auto" style="margin-bottom: 10px;"><i class="fas fa-pencil-alt"></i> Edit</a>
-              </div>
-            </div>
-          </div>';
+           <?php  
+            if(isset($_GET['msg'])){
+
+              $alertType = "info";
+              if(isset($_GET['alertType'])){
+                $alertType = $_GET['alertType'];
               }
-               
-            }else{
-              echo '<div class="bg-danger text-center text-white rounded" style="">
+              //echo "$alertType";
+              echo '
+              <div class="bg-'. $alertType .' text-center text-white rounded" style="margin-bottom: 40px;">
                <!--<span class="closebtn" onclick="this.parentElement.style.display=\'none\';">&times;</span>-->
                <button type="button" class="close btn-danger" style="margin-right: 10px;" onclick="this.parentElement.style.display=\'none\'"; aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
-               You dont have research added yet.
+               '. $_GET['msg'] .'
            </div>';
             }
-           ?>
-           </div>
+            $research_count =0;
+            if(isset($_SESSION['type'])){
+              if($_SESSION['type']==="STUDENT" || $_SESSION['type']==="student" ){
+                //echo $_SESSION['owner'];
+                $stmt = $con->prepare("SELECT COUNT(`id`) as research_count FROM `junc_authorbook` WHERE `aut_id` = ?");
+                $stmt->bind_param("i", $_SESSION['owner']);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $count = $result->fetch_assoc();
+                $research_count = $count['research_count'];
+              } 
+            }
+
+            if($research_count<1){
+              include 'notify.php';
+            }
+
+            if($research_count>0){
+              include 'limit_reach.php';
+            }else{
+              include 'add_research.php';
+            }
+            
+          ?>
+          
+          </div>
            
           
           

@@ -1,6 +1,7 @@
 <?php
 
 	session_start();
+	/*
 	if(isset($_POST['form-ref-id']) && isset($_SESSION)){
 		$id = $_POST['form-ref-id'];
 		$title = $_POST['ref-title'];
@@ -9,6 +10,9 @@
 		$book_id = $_POST['b_id'];
 		//echo $id . " " . $title . " " . $link . " !" . $citation . "!" . $book_id;
 
+		$link = str_replace("http://", "", $link);
+		$link = str_replace("https://", "", $link);
+		$link = "http://" . $link;
 		
 
 
@@ -101,6 +105,25 @@
 
 	}
 
+	*/
 
+	if(isset($_POST['b_id']) && isset($_SESSION['uid'])){
+		include($_SERVER["DOCUMENT_ROOT"] . "/rrms-buksu/includes/path.php");
+		include PROJECT_ROOT_NOT_LINK . 'includes/connection.php';
+		$dbconfig = new dbconfig();
+    	$con = $dbconfig ->getCon();
+    	$stmt = $con->prepare("UPDATE `book` SET `refrences` = ? WHERE `book`.`book_id` = ?");
+    	$stmt->bind_param("si", $_POST['edit-references'], $_POST['b_id']);
+    	if($stmt->execute()){
+    		echo $_POST['edit-references'];
+    		header("Location: ../?book=". $_POST['b_id'] ."&msg=Transaction Sucessful! You updated your References&alertType=success");
+    	}else{
+    		header("Location: ../?book=". $_POST['b_id'] ."&msg=Something went wrong while updating your References!&alertType=danger");
+    	}
+    	
+    	$con->close();
+	}else{
+		header("Location: ../");
+	}
 
 ?>

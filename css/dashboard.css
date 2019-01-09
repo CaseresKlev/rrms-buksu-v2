@@ -180,6 +180,7 @@ a.article:hover {
     CUSTOM STYLES
 ----------------------------------------------------- */
 
+
 #btn-editProfile{
     padding-right: 10px;
 }
@@ -363,6 +364,10 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
+.refrences-wrappler{
+    word-break: break-all; word-wrap: break-word;
+}
+
 /* Rounded sliders */
 .slider.round {
   border-radius: 34px;
@@ -389,6 +394,10 @@ input:checked + .slider:before {
     padding: 0px 10px 0px 10px;
     font-size: 9.5pt;
     margin-top: 20px;
+}
+
+.nav-item:hover{
+    border-bottom: 1px solid #003951;
 }
 
 

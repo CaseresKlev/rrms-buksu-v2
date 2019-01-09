@@ -130,7 +130,7 @@ $('#btn-edit-abstract').click(function(){
 
 $('#btn-edit-file').click(function(){
 	$('#file-upload').attr("accept", "application/pdf");
-	$('#uploadFile-note').html("*(PDF Format - Max file size 50MB)");
+	$('#uploadFile-note').html("*(PDF Format - Max file size 40MB)");
 	$('#modal-fileUpload-title').html("Change File");
 	$('#file-action').val("file");
 	$('#modalFileUpload').modal("toggle");

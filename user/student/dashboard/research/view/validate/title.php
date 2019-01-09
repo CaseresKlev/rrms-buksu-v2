@@ -13,6 +13,21 @@
 		$con = $dbconfig->getCon();
 		$id = $_POST['bookid'];
 		$title = $_POST['txt-title'];
+
+		//$temp = explode(" ", $title);
+		//$
+		//preg_replace("/ /", "-", $title);
+		$loc =  str_replace(':', '-', $title);
+		$loc =  str_replace('/', '-', $loc);
+		$loc =  str_replace(' ', '-', $loc);
+		$loc =  str_replace(';', '-', $loc);
+		$loc =  str_replace('\\', '-', $loc);
+		$loc =  str_replace('|', '-', $loc);
+		$loc =  str_replace('[', '-', $loc);
+		$loc =  str_replace(']', '-', $loc);
+		//echo $loc;
+
+		
 		//echo "$title";
 
 		$query = "SELECT `id` FROM `junc_authorbook` WHERE `book_id` = ? and `aut_id`=?";
@@ -22,12 +37,50 @@
 
 		$result = $stmt->get_result();
 		if($result->num_rows>0){
-			$stmt = $con->prepare("UPDATE `book` SET `book_title` = ? WHERE `book`.`book_id` = ?");
-			$stmt->bind_param("si", $title, $id);
+
+
+			$query = "SELECT YEAR(`pub_date`) as year, `aut_type` as type, link FROM `book` WHERE book.book_id = ?";
+			$stmt = $con->prepare($query);
+			$stmt->bind_param("i", $id);
+
+			$year = "";
+			$type = "";
+			$webLink = "";
+			if($stmt->execute()){
+				$result = $stmt->get_result();
+				$row = $result->fetch_assoc();
+				$webLink = $row['link'];
+				$year = $row['year'];
+				$type = $row['type'];
+			}
+
+			//echo " -----> " . $webLink;
+			
+
+			
+			$stmt = $con->prepare("UPDATE `book` SET `book_title` = ?, `link` = ? WHERE `book`.`book_id` = ?");
+			$stmt->bind_param("ssi", $title, $loc, $id);
+
 			if(!$stmt->execute()){
-				header("Location: ../?book=$id&msg=Transaction successful!<br> Your Research was Updated!&alertType=success");;
+				header("Location: ../?book=$id&msg=Transaction failed!<br> Your Research was NOT Updated! ". $loc ."&alertType=danger");
 			}else{
-				header("Location: ../?book=$id&msg=Transaction successful!<br> Your Research was Updated!&alertType=success");
+
+				$old = PROJECT_ROOT_NOT_LINK . "research/" . $year . "/" . $type . "/" . $webLink;
+				$new = PROJECT_ROOT_NOT_LINK . "research/" . $year . "/" . $type . "/" . $loc;
+				//echo $dir;
+				if(file_exists($old)){
+					//echo "Exist";
+					if(rename($old, $new)){
+						header("Location: ../?book=$id&msg=Transaction successful!<br> Your Research was Updated!&alertType=success");
+					}else{
+						echo "Old: " . $old . "\n";
+						echo "New: " . $new . "\n";
+						//header("Location: ../?book=$id&msg=Transaction failed!<br> Your Research was NOT Updated! Error while renaming.&alertType=danger");
+					}
+				}else{
+					header("Location: ../?book=$id&msg=Transaction failed!<br> Your Research was NOT Updated!&alertType=danger");
+				}
+				
 			}
 		}else{
 			echo "Not";
@@ -36,7 +89,7 @@
 
 		//print_r($_SESSION);
 	}else{
-		echo "Error";
+		header("Location: ../?book=$id&msg=Transaction failed!<br> Your Research was NOT Updated!&alertType=error");
 	}
 
 ?>

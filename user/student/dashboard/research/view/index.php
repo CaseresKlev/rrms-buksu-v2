@@ -1,16 +1,31 @@
 <?php
   
-  session_start();
+  $currentDIR =  "research";
   include($_SERVER["DOCUMENT_ROOT"] . "/rrms-buksu/includes/path.php");
+  include PROJECT_ROOT_NOT_LINK . "user/student/dashboard/preload.php";
 
-  include PROJECT_ROOT_NOT_LINK . 'includes/connection.php';
-  include PROJECT_ROOT_NOT_LINK . 'server_script/crypt.php';
+  $dbconfig = new dbconfig();
+  $con = $dbconfig ->getCon();
+
   if(isset($_SESSION['uid']) && $_SESSION['type']==="STUDENT"){
+
     //print_r($_SESSION);
     if(!isset($_GET['book'])){
       //header("Location: " . dirname( dirname(__FILE__) ));
      // $str =  dirname( dirname(__FILE__) );
       header("Location: " . PROJECT_ROOT . "404.php");
+    }else{
+      $query = "SELECT `id` FROM `junc_authorbook` WHERE `book_id` = ? and `aut_id` = ?";
+      $stmt = $con->prepare($query);
+      $stmt->bind_param("ii", $_GET['book'], $_SESSION['owner']);
+      if($stmt->execute()){
+        $result = $stmt->get_result();
+        //echo $result->num_rows;
+        if($result->num_rows<1){
+          header("Location: " . PROJECT_ROOT . "404.php");
+        }
+      }
+
     }
   }else{
     header("Location: " . PROJECT_ROOT );
@@ -30,15 +45,13 @@
     $acctype = $_SESSION['type'];
     $uid = $_SESSION['uid'];
 
-    $dbconfig = new dbconfig();
-    $con = $dbconfig ->getCon();
+    
     $query = "SELECT `a_id`, `a_fname`, `a_mname`, `a_lname`, `a_suffix`, `bib`, `a_add`, `a_contact`, `a_email`, `a_pic` FROM `author` WHERE `login` = " . $uid;
 
     $author = null;
     $result = $con->query($query);
     if($result->num_rows>0){
         $author = $result->fetch_assoc();
-        //print_r($author);
     }
 
 
@@ -110,101 +123,19 @@
 	<div class="wrapper">
         <!-- Sidebar  -->
         
-        <nav id="sidebar">
-            <div class="sidebar-header">
-                <h4>Research Record Mangement System</h4>
-            </div>
-            <div class="sidebar-header">
-                <i class="fas fa-user-circle fa-3x"></i>
-                <span style="position: absolute; margin-left: 10px">
-                  <h5 style="color: #BDB5B5"><?php echo strtoupper($accname) ?></h5>
-                  <h6> <?php echo strtoupper($acctype) ?></h6>
-                </span>
-            </div>
-            <ul class="list-unstyled components" style="margin-left: 10%">
-                <li id="link-myProfile">
-                    <a href="../../profile">My Profile
-                      <i class="fas fa-circle fa-xs" style="color:red"></i>
-                    </a>
-
-                    <!--<ul class="collapse list-unstyled" id="homeSubmenu">
-                        <li>
-                            <a href="#">Home 1</a>
-                        </li>
-                        <li>
-                            <a href="#">Home 2</a>
-                        </li>
-                        <li>
-                            <a href="#">Home 3</a>
-                        </li>
-                    </ul>-->
-                </li>
-                <li class="active">
-                    <a href="../">My Research</a>
-                </li>
-                <li>
-                    <a href="../../account/" >My Account</a>
-                    <!--<ul class="collapse list-unstyled" id="pageSubmenu">
-                        <li>
-                            <a href="#">Page 1</a>
-                        </li>
-                        <li>
-                            <a href="#">Page 2</a>
-                        </li>
-                        <li>
-                            <a href="#">Page 3</a>
-                        </li>
-                    </ul>-->
-                </li>
-                <!--<li>
-                    <a href="book_reports.php?title=&dept=&status=&author=&from=0&to=2018" target="_blank">Reports</a>
-                </li>
-                <li>
-                    <a href="dept.php">Department</a>
-                </li>-->
-            </ul>
-
-        </nav>
+         <?php  include PROJECT_ROOT_NOT_LINK . "user/student/dashboard/sidebar.php"  ?>
 
         <!-- Page Content  -->
         <div id="content">
-
-            <nav class="navbar navbar-expand-lg" style="background: #CDCDD8">
-                <div class="container-fluid">
-
-                    <button type="button" id="sidebarCollapse" class="btn btn-info">
-                        <i class="fas fa-align-left"></i>
-                        <span>Toggle Menu</span>
-                    </button>
-                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="fas fa-align-justify"></i>
-                    </button>
-
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="nav navbar-nav ml-auto">
-                            <li class="nav-item active">
-                                <a class="nav-link" href="<?php echo PROJECT_ROOT; ?>">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?php echo PROJECT_ROOT . "logout.php"?>">Logout</a>
-                            </li>
-                            <!--<li class="nav-item">
-                                <a class="nav-link" href="#">Page</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Page</a>
-                            </li>-->
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+          <!-- Toggle Menu  -->
+            <?php include PROJECT_ROOT_NOT_LINK . "user/student/dashboard/toggle_menu.php"; ?>
 
 
            <!---- PLACE YOUR DIVS HERE --->
            <input type="hidden" name="" id="book_id" value="<?php echo($_GET['book']) ?>">
            <?php
               
-              $stmt = $con->prepare("SELECT `book_id`, `book_title`, `abstract`, `pub_date`, `department`, `keywords`, `status`, `cover`,`docloc`, `dowloadable`  FROM `book` WHERE book_id=?;");
+              $stmt = $con->prepare("SELECT `book_id`, `book_title`, `abstract`, `pub_date`, `department`, `keywords`, `status`, `cover`,`docloc`, `dowloadable`, `refrences`  FROM `book` WHERE book_id=?;");
               $stmt->bind_param("i", $_GET['book']);
               $stmt->execute();
               $result = $stmt->get_result();
@@ -234,7 +165,16 @@
             <form enctype="multipart/form-data" id="myForm" action="validate/">
             <div class="row">
               <div class="col-md-3 col-sm-12 leftContent">
-                 <img src="<?php echo  PROJECT_ROOT . $bookDet['cover']  ?>" id="cover-img">
+                 <img src="<?php 
+
+                 if($bookDet['cover']!==""){
+                  echo  PROJECT_ROOT . $bookDet['cover'] ; 
+                 }else{
+                  echo PROJECT_ROOT . "default/cover/df-cover.png";
+                 }
+
+
+                 ?>" id="cover-img">
                  <div class="row">
                   <div class="badge form-control btn-warning" id="btn-edit-cover" style="width:  80%; margin: auto; margin-top: 10px; margin-bottom: 20px; font-size: 12pt;">Change cover</div>
                  </div>
@@ -372,9 +312,9 @@
 
 
                           ?>
-                          
+                          <label for="author-search">Add Author:</label>
                           <div class="input-group mb-3">
-                            <input type="text" class="form-control onEdit txt-searchAuthor"  placeholder="Search Author to Add" aria-label="Recipient's username" aria-describedby="basic-addon2" >
+                            <input type="text" class="form-control onEdit txt-searchAuthor"  placeholder="Search Author to Add" aria-label="Recipient's username" aria-describedby="basic-addon2" id="author-search">
                             <div class="input-group-append">
                               <div class="btn btn-outline-success" id="btnSearchAuthor" type="button"><i class="fas fa-search"></i></div>
                             </div>
@@ -444,13 +384,137 @@
                   </div>
                   <div class="container data-group">
                     <div class="row bg-secondary text-white data-head">
-                      References:
-                      <div class="badge badge-primary ml-auto" id="btn-edit-reference" style="margin: auto; margin-right: 10px;" onclick="removeEditRef('','',0, 'add')"><i class="fas fa-plus"></i> Add</div>
-                      
+                      Submitted on:
+                    </div>
+                    <div class="row data-content">
+                      <div class="text onView edit-Keywords">
+                        <?php 
+                          $date = new DateTime($bookDet['pub_date']);
+                          echo $date->format('F jS, Y');
+                         ?>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="container data-group">
+                    <div class="row bg-secondary text-white data-head">
+                      Research History:
+                    </div>
+                    <div class="row data-content">
+                      <div class="text onView edit-Keywords">
+                        <ul>
+                          <?php  
+
+
+                            $result = $con->query("SELECT `book_stat`, `date` FROM `bookhistory` WHERE book_id = " . $_GET['book']);
+                            if($result->num_rows>0){
+
+                                while ($row = $result->fetch_assoc()) {
+                                  echo "<li>";
+                                   $date = new DateTime($row['date']);
+
+                                    if($row['book_stat']==="Unpublished"){
+                                      
+                                      echo "Submitted on " . $date ->format('F jS, Y');
+                                    }else if($row['book_stat']==="Utilized"){
+
+                                      $stmt = $con->prepare("SELECT * FROM `utilize` WHERE `book_id` = ?");
+                                      $stmt->bind_param("i", $_GET['book']);
+                                      if($stmt->execute()){
+                                        $result = $stmt->get_result();
+                                        if($result->num_rows>0){
+
+                                          $util = $result->fetch_assoc();
+                                          $date = new DateTime($util['date']);
+                                          echo $row['book_stat'] . " on " . $date ->format('F jS, Y') . " at " . $util['orgname'] . " - " . $util['orgaddress'];
+                                        }
+
+                                      }
+
+                                      
+                                    }
+                                   echo "</li>";
+                                }
+                            }
+                            
+
+                            
+                           
+                            
+                            
+                          ?>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="container data-group">
+                    <div class="row bg-secondary text-white data-head">
+                      Awards:
                     </div>
                     <div class="row data-content" >
+                      <div class="text onView edit-Keywords">
+                        <ul>
+                          
+                          <?php 
 
-                      <?php 
+                            $result = $con->query("SELECT `awards`, `parties`, `location`, `date` FROM `awards` WHERE book_id = " . $_GET['book']);
+                            if($result->num_rows>0){
+                              while ($row=$result->fetch_assoc()) {
+                                echo "<li>";
+                                $date = new DateTime($row['date']);
+                                  echo "Awarded as <em><b>" . $row['awards'] . "</b></em> during the <b>" . $row['parties'] . "</b> at " . $row['location'] . " last " . $date->format('F jS Y');
+
+                                echo "</li>";
+                              }
+                            }else{
+                              echo "<p>No awards yet</p>";
+                            }
+
+
+                           ?>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="container data-group" style="margin-bottom: 40px;">
+                    <div class="row bg-secondary text-white data-head">
+                      References:
+                      <div class="badge badge-warning ml-auto" id="btn-edit-reference" style="margin: auto; margin-right: 10px;" onclick="removeEditRef('','',0, 'add')"><i class="fas fa-edit"></i> Edit</div>
+                      
+                    </div>
+                    <div class="row data-content refrences-wrappler">
+                      <h5><small>
+                        <?php
+                        $origRef = $bookDet['refrences'];
+                         $reg_exURL = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
+                         $final = "";
+                         if(preg_match_all($reg_exURL, $bookDet['refrences'], $urls)){
+                          $usedPatterns=array();
+                          foreach ($urls[0] as $pattern) {
+                            //echo "$pattern------";
+                            if(!array_key_exists($pattern, $usedPatterns)){
+                              $usedPatterns[$pattern] = true;
+                              $bookDet['refrences'] = str_replace($pattern, "<a target='_blank' href=" . $pattern . "><br>[$pattern]</a>", $bookDet['refrences']);
+                            }
+                          }
+                          echo  nl2br($bookDet['refrences']);
+
+                            //echo count($url);
+                            //print_r($url);
+                            //$final = preg_replace($reg_exURL, "<a target='_blank' href=" . $url[0] . ">$url[0]</a>", $bookDet['refrences']);
+                         }
+
+
+                        
+
+                        ?>
+                     </small></h5>
+                    </div>
+                  </div> 
+            </div>
+           </div>
+
+           <!--  <?php 
                         $ref = $con->query("SELECT ref.id as ref_id, junk_bookref.id as junction_id, ref.reftitle as title, ref.link as link FROM `junk_bookref` inner JOIN ref on ref.id = webref_id WHERE book_id = " . $_GET['book']);
                         if($ref->num_rows>0){
                           $refCount = 1;
@@ -500,90 +564,7 @@
                             <div class="badge badge-danger ml-auto" id="btn-del-ref" onclick="removeRef(1);" style="margin: auto; font-size: 10pt;"><i class="fas fa-trash-alt"></i></div>
                           </div>
                         </div>
-                      </div>-->
-                    </div>
-                  </div>
-                  <div class="container data-group">
-                    <div class="row bg-secondary text-white data-head">
-                      Submitted on:
-                    </div>
-                    <div class="row data-content">
-                      <div class="text onView edit-Keywords">
-                        <?php 
-                          $date = new DateTime($bookDet['pub_date']);
-                          echo $date->format('F jS, Y');
-                         ?>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="container data-group">
-                    <div class="row bg-secondary text-white data-head">
-                      Research History:
-                    </div>
-                    <div class="row data-content">
-                      <div class="text onView edit-Keywords">
-                        <ul>
-                          <?php  
-
-
-                            $result = $con->query("SELECT `book_stat`, `date` FROM `bookhistory` WHERE book_id = " . $_GET['book']);
-                            if($result->num_rows>0){
-
-                                while ($row = $result->fetch_assoc()) {
-                                  echo "<li>";
-                                   $date = new DateTime($row['date']);
-
-                                    if($row['book_stat']==="Unpublished"){
-                                      
-                                      echo "Submitted on " . $date ->format('F jS, Y');
-                                    }else{
-                                      echo $row['book_stat'] . " on " . $date ->format('F jS, Y');
-                                    }
-                                   echo "</li>";
-                                }
-                            }
-                            
-
-                            
-                           
-                            
-                            
-                          ?>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="container data-group">
-                    <div class="row bg-secondary text-white data-head">
-                      Awards:
-                    </div>
-                    <div class="row data-content" style="margin-bottom: 40px;">
-                      <div class="text onView edit-Keywords">
-                        <ul>
-                          
-                          <?php 
-
-                            $result = $con->query("SELECT `awards`, `parties`, `location`, `date` FROM `awards` WHERE book_id = " . $_GET['book']);
-                            if($result->num_rows>0){
-                              while ($row=$result->fetch_assoc()) {
-                                echo "<li>";
-                                $date = new DateTime($row['date']);
-                                  echo "Awarded as <em><b>" . $row['awards'] . "</b></em> during the <b>" . $row['parties'] . "</b> at " . $row['location'] . " last " . $date->format('F jS Y');
-
-                                echo "</li>";
-                              }
-                            }
-
-
-                           ?>
-                        </ul>
-                      </div>
-                    </div>
-                  </div> 
-            </div>
-           </div>
-
-
+                      </div>--> 
 
         </form>
 
@@ -678,11 +659,11 @@
                   </div>
                   
                  <!--modal edit reference-->
-                 <div class="modal fade" id="modalAddEditRef" role="dialog">
-                    <div class="modal-dialog">
+                 <div class="modal fade" id="modalAddEditRef" role="dialog" >
+                    <div class="modal-dialog" style="max-width: 720px;">
 
                       <!-- Modal content-->
-                      <div class="modal-content">
+                      <div class="modal-content" >
                         <div class="modal-header">
 
                           <h5 class="modal-title" id="modal-addAuthor-title">Edit reference</h5>
@@ -691,7 +672,7 @@
                           
                         <form action="validate/reference.php" method="POST">
                           <input type="text" name="b_id" class="d-none" value="<?php  echo $bookDet['book_id'] ?>">
-                          <input type="number" class="d-none" name="form-ref-id" id="form-ref-id" value="0">
+                          <!--<input type="number" class="d-none" name="form-ref-id" id="form-ref-id" value="0">
                           <div class="modal-body">
                             <div class="form-group option1">
                               <label for="ref-title">Reference: <span class="badge-warning note">*(APA Format)</span></label>
@@ -699,7 +680,7 @@
                             </div>
                             <div class="form-group option1">
                               <label for="ref-title">Reference Link:</label>
-                              <input type="text" class="form-control" name="ref-link" id="ref-link" required>
+                              <input type="text" class="form-control" name="ref-link" id="ref-link" placeholder="http://example.com" required>
                             </div>
                             <div class="form-group option2" style="display: none">
                               <label for="ref-title">Insert Local Citation Key: <span class="btn-warning note">Paper that found on this Server</span></label>
@@ -712,10 +693,10 @@
                           </div>
                           
                           
-                       
-                         
+                        -->
+                         <textarea class="form-control p-2" cols="100" rows="15" name="edit-references" required><?php echo  $origRef; ?></textarea>
                         <div class="modal-footer">
-                          <input   type="submit" value="Submit" class="btn btn-primary"> 
+                          <input   type="submit" value="Save" class="btn btn-success"> 
                         </div>
                          </form>
                       </div>
@@ -741,7 +722,7 @@
                             <input type="number" name="book_id" class="d-none" value="<?php echo $_GET['book'] ?>">
                             <input type="text" class="d-none" name="file-action" id="file-action" value="file">
                             <div class="form-group option1">
-                              <label for="file-title" id="file-title">Choose file to Upload: <span id="uploadFile-note" class="badge-danger note">*(PDF Format - Max File size 50MB)</span></label>
+                              <label for="file-title" id="file-title">Choose file to Upload: <span id="uploadFile-note" class="badge-danger note">*(PDF Format - Max File size 40MB)</span></label>
                               <input type="file" name="file" id="file-upload" accept="application/pdf" required>
                             </div>
                           </div>

@@ -34,11 +34,11 @@
 		}
 
 
-		$query = "INSERT INTO `on_update_Author` (`id`,`action`, `author`, `book_id`, `referer`, `date`) VALUES (NULL, ?, ?, ?, ?, ?)";
+		$query = "INSERT INTO `on_update_Author` (`id`,`action`, `author`, `book_id`, `referer`, `date`) VALUES (NULL, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
 		$stmt = $con->prepare($query);
 		$dt = new DateTime();
 		 
-		$stmt->bind_param("siiis", $action, $author_id, $book_id, $_SESSION['owner'], $dt->format('Y-m-d H:i:s'));
+		$stmt->bind_param("siii", $action, $author_id, $book_id, $_SESSION['owner']);
 		
 
 		

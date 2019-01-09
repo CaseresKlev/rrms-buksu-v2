@@ -50,7 +50,7 @@
                 <div class="col-md-9 col-sm-12">
                     <div class="row" style="padding-bottom: 30px;">
                             <div class="col-md-3" id="cover-div">
-                                <a href=research/?book_id=2>
+                                <a href=#>
                                     <img src="' . PROJECT_ROOT . $row['cover'] . '" id="cover-img">
                                 </a>
                             </div>
@@ -102,12 +102,6 @@
                                               <th scope="row">Keywords:</th>
                                               <td style="font-style: italic;"> 
                                                 '. $row['keywords'] .'
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <th scope="row">Citation Key:</th>
-                                              <td>  
-                                                '. $row['refkey'] .' &nbsp; <div class="btn btn-primary btn-sm">Copy</div>
                                               </td>
                                             </tr>
                                             <tr>
@@ -172,22 +166,20 @@
                                 </div>
                                 <div class="row" style="padding-top: 30px;">
                                     <h3>References</h3>
-                                    <div class="col-md-12" style="text-align: justify; border-top: 1px solid black; margin-left: 2px;">
-                                        <ul>';
-                                            $query = 'SELECT ref.reftitle, ref.link FROM `junk_bookref` inner JOIN ref ON ref.id = junk_bookref.webref_id WHERE junk_bookref.book_id = ' . $book_id;
-                                            $ref = $con->query($query);
-                                            if($ref->num_rows>0){
-                                                while($refRow=$ref->fetch_assoc()){
-                                                    echo '
-                                                    <li  class="link-details">
-                                                <h6>'. $refRow['reftitle'] .' Retreived from</h6>
-                                                <a class="minor-link" href="'. $refRow['link'] .'" target="_blank">'. $refRow['link'] .'</a>
-                                            </li>';
-                                                }
-                                            }
-                                            
-                                        echo '</ul>
-                                    </div>
+                                    <div class="col-md-12" style="text-align: justify; border-top: 1px solid black; margin-left: 2px; word-break: break-all; word-wrap: break-word;">
+                                        '; 
+                                        
+                                     $reg_exURL = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
+                                     $final = "";
+                                     if(preg_match($reg_exURL, $row['refrences'], $url)){
+                                        $final = preg_replace($reg_exURL, "<a href=" . $url[0] . ">$url[0]</a>", $row['refrences']);
+                                     }
+
+
+                                    echo  nl2br($final);
+
+
+                                    echo '</div>
                                 </div>
                                 <div class="row" style="padding-top: 30px;">
                                     <h3>Research History</h3>
@@ -208,6 +200,26 @@
 
                                                         echo '</h6>
                                                     </li>';
+                                                    }else if($historyRow['book_stat']==="Utilized"){
+                                                      $query = "SELECT * FROM `utilize` WHERE `book_id` = " . $book_id;
+                                                      $utilize = $con->query($query);
+                                                      if($utilize){
+                                                        while($utilizedRow = $utilize->fetch_assoc()){
+                                                            echo '
+                                                              <li style="padding-top: 10px;">
+                                                                  <h6>Utilize at ' . $utilizedRow['orgname'] . ', ' . $utilizedRow['orgaddress'] . " last ";
+
+                                                                  $date = $historyRow['date'];
+                                                                          $sdate=date_create($date); 
+                                                                          echo ' ' . date_format($sdate,'F d, Y');
+
+                                                                  echo '</h6>
+                                                              </li>';
+                                                      
+                                                        }
+                                                      }
+                                                      
+
                                                     }
                                                     
                                                 }

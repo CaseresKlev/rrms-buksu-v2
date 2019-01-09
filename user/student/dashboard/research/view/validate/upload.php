@@ -1,5 +1,10 @@
 <?php
 	session_start();
+	/*echo "Seesion id: " . $_SESSION['uid'] ."\n";
+	print_r($_FILES['file']);
+	echo "\nBook_ID: " . $_POST['book_id'];
+	echo "\nAction : " . $_POST['file-action'];
+	*/
 	if(isset($_SESSION['uid']) && $_FILES['file'] && $_POST['book_id'] && $_POST['file-action']){
 		
 
@@ -68,7 +73,7 @@
 		        }else if($action==="cover"){
 		        	$fileAllowed = array('jpg', 'png', 'jpeg');
 		        }else{
-		        	header("Location: ../?book=" . $book_id . "&msg=Error occured while uploading your file!&alertType=danger");
+		        	header("Location: ../?book=" . $book_id . "&msg=Invalid file submitted!&alertType=danger");
 		        }
 
 		        	
@@ -80,11 +85,12 @@
 		            	$size = 0;
 
 		            	if($action==="file"){
-		            		$size = 50000000;
+		            		$size = FILE_UPLOAD_SIZE;
 		            	}else if($action==="cover"){
-		            		$size = 2000000;
+		            		$size = COVER_UPLOAD_SIZE;
 		            	}else{
-		            		header("Location: ../?book=" . $book_id . "&msg=Error occured while uploading your file!&alertType=danger");
+		            		echo "something happend in file";
+		            		//header("Location: ../?book=" . $book_id . "&msg=Error occured while uploading your file!&alertType=danger");
 		            	}
 
 
@@ -101,7 +107,8 @@
 			            	}else if($action==="cover"){
 			            		$dbloc = "research/" . $row['year'] . "/" . $row['aut_type'] . "/cover/";
 			            	}else{
-			            		header("Location: ../?book=" . $book_id . "&msg=Error occured while uploading your file!&alertType=danger");
+			            		echo "ggggggg";
+			            		//header("Location: ../?book=" . $book_id . "&msg=Error occured while uploading your file!&alertType=danger");
 			            	}
 
 		                    
@@ -157,11 +164,11 @@
 		    }
 
 		}else{
-			header("Location: ../?book=" . $book_id . "&msg=The Research you are refering to is not available!<br> It may happen that one of the author or the Administrator remove your Research. Please Contact the administrator.&alertType=danger");
+			header("Location: ../?book=" . $book_id . "&msg=yyyyThe Research you are refering to is not available!<br> It may happen that one of the author or the Administrator remove your Research. Please Contact the administrator.&alertType=danger");
 		}
 	    
 	}else{
-		header("Location: ../?book=" . $book_id . "&msg=The Research you are refering to is not available!<br> It may happen that one of the author or the Administrator remove your Research. Please Contact the administrator.&alertType=danger");
+		header("Location: ../?book=" . $book_id . "&msg=zzzzzThe Research you are refering to is not available!<br> It may happen that one of the author or the Administrator remove your Research. Please Contact the administrator.&alertType=danger");
 	}
 
  

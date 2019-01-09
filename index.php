@@ -129,7 +129,7 @@
 						$dbconfig= new dbconfig();
 						$con= $dbconfig -> getCon();
 							//$filter = $_GET['filter'];
-								$query= "SELECT book.book_id, book.book_title, book.cover, book.link, book.aut_type, book.docloc, SUBSTRING(book.pub_date, 1, 4) as date, book.abstract FROM groupdoc INNER JOIN book on groupdoc.book_id = book.book_id INNER JOIN account ON account.id = groupdoc.accid WHERE book.enabled=1 and account.type = 'STUDENT' ORDER BY book.pub_date ASC limit 20";
+								$query= "SELECT book.book_id, book.book_title, book.cover, book.link, book.aut_type, book.docloc, SUBSTRING(book.pub_date, 1, 4) as date, book.abstract, `keywords` FROM book WHERE book.enabled=1 ORDER BY book.pub_date ASC limit 20";
 								$result = $con -> query($query);
 								if ($result->num_rows>0) {
 									while ($row = $result->fetch_assoc()) {
@@ -138,7 +138,15 @@
 										echo '<div class="row entry">
 							<div class="col-md-2 col-sm-4" id="cover-div">
 								<a href=' . PROJECT_ROOT . 'research/'. $row['date'] ."/" . $row['aut_type'] . "/" . $row['link']. '>
-								  	<img src="'. $row['cover'] .'" id="cover-img">
+								  	<img src="';
+
+								  	if($row['cover']===""){
+								  		echo PROJECT_ROOT . "default/cover/df-cover.png";
+								  	}else{
+								  		echo $row['cover'];
+								  	}
+
+								  	echo '" id="cover-img">
 								</a>
 							</div>
 							<div class="col-md-10" id="details">
@@ -162,16 +170,9 @@
 								  	'</div>
 								</div>
 								<div class="row keywords">
-								Key words: &nbsp; <i style="color:#3366ff">';
+								Key words: &nbsp; <i style="color:#3366ff">'
 
-										$query= 'SELECT keywords.key_words FROM `junc_bookkeywords` INNER JOIN keywords on keywords.id = junc_bookkeywords.keywords_id WHERE junc_bookkeywords.book_id = ' . $book_id;
-								  						$resulKw = $con -> query($query);
-								  						if($resulKw->num_rows>0){
-								  							while($kw = $resulKw->fetch_assoc()){
-								  								echo $kw['key_words'] . ", "; 
-								  							}
-								  						}
-								  		echo '</i>
+										. $row['keywords'] .'</i>
 												</div>
 											</div>
 										</div>';
