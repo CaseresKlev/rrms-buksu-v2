@@ -22,9 +22,12 @@
 		$action_temp = $temp[0];
 		$author_id = $temp[1];
 		$book_id = $temp[2];
+
+
+		echo "Author to remove: " . $author_id;
+		echo " Book id: " . $book_id;
+		echo " By: " . $_SESSION['owner'];
 		//print_r($temp);
-		date_default_timezone_set('Asia/Manila');
-		$dt = new DateTime();
 
 		$action = "";
 		if($action_temp==="remove"){
@@ -33,15 +36,16 @@
 			$action = "added";
 		}
 
+		//print_r($temp);
 
-		$query = "INSERT INTO `on_update_Author` (`id`,`action`, `author`, `book_id`, `referer`, `date`) VALUES (NULL, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+
+		$query = "INSERT INTO `on_update_Author` (`id`,`action`, `author`, `book_id`, `referer`) VALUES (NULL, ?, ?, ?, ?)";
+
 		$stmt = $con->prepare($query);
-		$dt = new DateTime();
 		 
 		$stmt->bind_param("siii", $action, $author_id, $book_id, $_SESSION['owner']);
-		
+				echo $query;
 
-		
 		if($stmt->execute()){
 			$myObj->status = "success";
 

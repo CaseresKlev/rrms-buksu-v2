@@ -34,11 +34,13 @@
     <link rel="stylesheet" type="text/css" href="<?php echo(PROJECT_ROOT . "css/bootstrap-min-4.1.0.css"); ?>">
     <!-- Our Custom CSS -->
     <link rel="stylesheet" href="<?php echo(PROJECT_ROOT . "css/dashboard.css"); ?>">
+    <link rel="stylesheet" href="<?php echo(PROJECT_ROOT . "css/Animate.css"); ?>">
     <!-- scrollbar -->
     <link rel="stylesheet" href="<?php echo(PROJECT_ROOT . "css/custom_scroll.css"); ?>">
 
     <script defer src="<?php echo(PROJECT_ROOT . "js/solid.js"); ?>"></script>
     <script defer src="<?php echo(PROJECT_ROOT . "js/fontawesome.js"); ?>"></script>
+    <script defer src="<?php echo(PROJECT_ROOT . "js/bootstrap-notify.js"); ?>"></script>
         <style>
         .no-js #loader { display: none;  }
         .js #loader { display: block; position: absolute; left: 100px; top: 0; }
@@ -274,14 +276,54 @@
             });
         });
     </script>
+    <div class="d-none notif-message">
+      Find out&nbsp;<a class="badge badge-info" href="#" onclick="showDetailedNotification()">Here</a> &nbsp;or click the "Notification" above.<br><br>I got it <span class="badge badge-danger donotshow" onclick="doNotShow()">Do not show next time</span>
+    </div>
+    
 
     <script src="<?php echo PROJECT_ROOT . "js/dashboard.js" ?>"></script>
+    <?php 
+        $query = "SELECT * FROM `notification` where author_id = " . $_SESSION['owner'];
+        $result = $con->query($query);
+        $notifShowRow = $result->fetch_assoc();
+        $showNotif = false;
+        if($notifShowRow['isShow']==1){
+            $showNotif = true;
+        }
+        if($notif['count'] && $showNotif){
+          echo '<script>
 
+          $(document).ready(function(){
+        setTimeout(function() { 
+          showNotification();
+          
+          //alert(message);
+
+          
+          //showNotification();
+
+          });
+        }, 5000); 
+
+
+          </script>';
+        }
+
+
+       ?>
     <script type="text/javascript">
       //$('#suf').val($('#suf').val());
       var s = $('#suf-val').val();
       $('#suf').val(s).change();
       //alert(s);
+
+
+      
+        
+
+      
+
+
     </script>
 </body>
 </html>

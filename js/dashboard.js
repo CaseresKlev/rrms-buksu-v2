@@ -1,3 +1,120 @@
+var notify;
+
+function working(sender,  cancel,  action, spin_img, container, destination, param, working_entry){
+	//alert(param);
+	//alert("Action: " + action + " Spinner: " + spin_img + " container: " + container );
+
+	$(sender).prop('disabled', true);
+	$(cancel).prop('disabled', true);
+	$(container).show();
+	$(spin_img).attr('src', 'http://' + window.location.hostname + '/rrms-buksu/img/loader-32x/loader1.gif');
+
+	var url = "http://" + window.location.hostname + "/rrms-buksu/" + destination;
+	var http = new XMLHttpRequest();
+	var params = 'action='+ action + "&param=" + param;
+
+	http.open('POST', url, true);
+	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+	http.onreadystatechange = function() {
+		if(this.readyState == 4 && this.status == 200) {
+			//var obj = JSON.parse(this.responseText);
+			alert(this.responseText);
+			var responce = this.responseText.split(":");
+			if(responce[1]==="error"){
+				$(container).html(responce[1]);
+			}else{
+				$(container).html(responce[1]);
+				setTimeout(function(){ $(working_entry).toggle("right"); }, 1000);
+			}
+			
+			//if(obj)
+			/*if(this.responseText=="Success"){
+				notify.update('title', '<strong>I got it!</strong><br>');
+				notify.update('message', 'I will not show next time');
+			}else{
+				notify.update('title', '<strong>Sorry something went wrong</strong><br>');
+				notify.update('message', 'I will be showing next time');
+			}*/
+		}
+	}
+	http.send(params);
+
+}
+
+
+
+function doNotShow(){
+
+	var url = "http://" + window.location.hostname + "/rrms-buksu/server_script/notification.php";
+	//alert(url);
+	var http = new XMLHttpRequest();
+	
+	var params = 'show='+ 0;
+	http.open('POST', url, true);
+	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+	http.onreadystatechange = function() {
+		if(this.readyState == 4 && this.status == 200) {
+			//var obj = JSON.parse(this.responseText);
+			//alert(this.responseText);
+			//if(obj)
+			if(this.responseText=="Success"){
+				notify.update('title', '<strong>I got it!</strong><br>');
+				notify.update('message', 'I will not show next time');
+			}else{
+				notify.update('title', '<strong>Sorry something went wrong</strong><br>');
+				notify.update('message', 'I will be showing next time');
+			}
+		}
+	}
+	http.send(params);
+	
+
+
+
+	
+	setTimeout(function() { 
+		notify.close();
+	}, 1500);
+}
+
+function showNotification(){
+	//alert("it is notification");
+	var message = $(".notif-message").html();
+	notify = $.notify({
+	    title: "<i class=\"fas fa-bell fa-lg\"></i> <strong>You have new Author request:</strong><br>",
+	    message: message
+	  },{
+	    icon_type: "image",
+	    animate: {
+	      enter: "animated fadeInRight",
+	      exit: "animated fadeOutRight"
+	    },
+	    placement: {
+	      from: "top",
+	      align: "right"
+	    },
+	    type: "info",
+	    mouse_over: "pause",
+	    delay: 3000,
+	    offset: {
+	      x: 20,
+	      y: 90
+	    }
+	}
+	);
+}
+
+function showDetailedNotification(){
+	if(notify!=null){
+		
+	notify.close();
+	}
+	$("#modalNotification").modal("toggle");
+}
+
+
 $('#btn-editProfile').on('click', function () {
 
 	var state = $(this).text();
@@ -219,7 +336,7 @@ $('#btnSearchAuthor').click(function(){
 	var k = $('.txt-searchAuthor').val();
 	var http = new XMLHttpRequest();
 	var url = 'validate/add-author.php';
-	var params = 'key='+ k+ '&book_id='+book_id;
+	var params = 'key='+ k + '&book_id='+book_id;
 	http.open('POST', url, true);
 
 	//Send the proper header information along with the request
@@ -267,7 +384,8 @@ function removeAuthor(author, name){
 	//alert(name);
 	$('#displayName').html(name);
 	$('#displayName2').html(name);
-	$('#author').val("remove-"+author);
+	var book_id = $('#book_id').val();
+	$('#author').val("remove-"+ author + "-" + book_id);
 	//alert($('#author').val());
 	$('#modalAuthor').modal('toggle');
 	//var x = "#author-" + author;

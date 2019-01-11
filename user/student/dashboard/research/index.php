@@ -53,6 +53,7 @@
     
     <!-- Our Custom CSS -->
     <link rel="stylesheet" href="<?php echo(PROJECT_ROOT . "css/dashboard.css"); ?>">
+    <link rel="stylesheet" href="<?php echo(PROJECT_ROOT . "css/Animate.css"); ?>">
     <!-- scrollbar -->
     <link rel="stylesheet" href="<?php echo(PROJECT_ROOT . "css/custom_scroll.css"); ?>">
 
@@ -153,6 +154,7 @@
     <script src="<?php echo(PROJECT_ROOT . "js/popper.min.js")?>"></script>
     <!-- Bootstrap JS -->
     <script src="<?php echo(PROJECT_ROOT . "js/bootstrap.min-4.1.0.js") ?>"></script>
+    <script src="<?php echo PROJECT_ROOT . "js/dashboard.js" ?>"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
