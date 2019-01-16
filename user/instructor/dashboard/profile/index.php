@@ -1,6 +1,6 @@
 <?php
   include($_SERVER["DOCUMENT_ROOT"] . "/rrms-buksu/includes/path.php");  
-  include PROJECT_ROOT_NOT_LINK . "user/student/dashboard/preload.php";
+  include PROJECT_ROOT_NOT_LINK . "user/instructor/dashboard/preload.php";
   $currentDIR =  basename(__DIR__);
 
   
@@ -70,12 +70,12 @@
 	<div class="wrapper">
         <!-- Sidebar  -->
         
-         <?php  include PROJECT_ROOT_NOT_LINK . "user/student/dashboard/sidebar.php"  ?>
+         <?php  include PROJECT_ROOT_NOT_LINK . "user/instructor/dashboard/sidebar.php"  ?>
 
         <!-- Page Content  -->
         <div id="content">
           <!-- Toggle Menu  -->
-            <?php include PROJECT_ROOT_NOT_LINK . "user/student/dashboard/toggle_menu.php"; ?>
+            <?php include PROJECT_ROOT_NOT_LINK . "user/instructor/dashboard/toggle_menu.php"; ?>
 
 
            <!---- PLACE YOUR DIVS HERE --->

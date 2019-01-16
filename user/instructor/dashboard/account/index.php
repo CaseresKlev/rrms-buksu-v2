@@ -2,7 +2,7 @@
 
 
   include($_SERVER["DOCUMENT_ROOT"] . "/rrms-buksu/includes/path.php");  
-  include PROJECT_ROOT_NOT_LINK . "user/student/dashboard/preload.php";
+  include PROJECT_ROOT_NOT_LINK . "user/instructor/dashboard/preload.php";
   $currentDIR =  basename(__DIR__);
 
   
@@ -72,12 +72,12 @@
 	<div class="wrapper">
         <!-- Sidebar  -->
         
-         <?php  include PROJECT_ROOT_NOT_LINK . "user/student/dashboard/sidebar.php"  ?>
+         <?php  include PROJECT_ROOT_NOT_LINK . "user/instructor/dashboard/sidebar.php"  ?>
 
         <!-- Page Content  -->
         <div id="content">
           <!-- Toggle Menu  -->
-            <?php include PROJECT_ROOT_NOT_LINK . "user/student/dashboard/toggle_menu.php"; ?>
+            <?php include PROJECT_ROOT_NOT_LINK . "user/instructor/dashboard/toggle_menu.php"; ?>
 
 
            <!---- PLACE YOUR DIVS HERE --->
@@ -130,23 +130,6 @@
 			           			</div>
 
            					</form>	
-           				</div>
-           				<div class="col-md-6 col-sm-12 mb-5 align-middle">
-           					<form method="POST"  action="validate/update_account.php">
-				           		<div class="container">
-					           		<div class="row bg-secondary text-white data-head">  
-					                        Update Account as Instructor: 
-					                </div>
-					                <div class="form-group">
-					                	<label for="accesscodes">Access Code:<span class="text-danger">*&nbsp;&nbsp;</span><span class="badge badge-warning">Note: After updating your account you will be logout.</span></label>
-					                	<input type="text" class="form-control" name="accesscodes" id="accesscodes" required pattern=".{8,}" title="Should Contain 8 Character Valid Access Codes" placeholder="Instructor Access Codes" maxlength="8">
-					                </div>
-
-					                <div class="form-group">
-				           				<input class="form-control btn btn-primary" type="Submit" name="Submit">
-				           			</div>
-				           		</div>
-				           </form>
            				</div>
            			</div>
            		</div>

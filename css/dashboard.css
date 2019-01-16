@@ -131,7 +131,6 @@ a[data-toggle="collapse"] {
 ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
-    background: #6d7fcc;
 }
 
 ul.CTAs {
@@ -281,11 +280,6 @@ a.article:hover {
     width: 80%;
 }
 
-.onEdit{
-    border-left: 5px solid #00ff00;
-   
-}
-
 #department, #keywords, #abstract{
     display: none;
 }
@@ -398,6 +392,10 @@ input:checked + .slider:before {
 
 .nav-item:hover{
     border-bottom: 1px solid #003951;
+}
+
+.clickable-row{
+    cursor: pointer;
 }
 
 

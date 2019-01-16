@@ -22,7 +22,9 @@
 <link rel="stylesheet" type="text/css" href="<?php echo(PROJECT_ROOT . "/css/bootstrap-min-4.1.0.css"); ?>">
 <!-- Our Custom CSS -->
 <link rel="stylesheet" href="<?php echo(PROJECT_ROOT . "/css/style.css"); ?>">
+<link rel="stylesheet" href="<?php echo(PROJECT_ROOT . "css/Animate.css"); ?>">
 <script defer src="<?php echo(PROJECT_ROOT . "/js/solid.js"); ?>"></script>
+<script defer src="<?php echo(PROJECT_ROOT . "js/bootstrap-notify.js"); ?>"></script>
 <!--<script defer src="<?php echo(PROJECT_ROOT . "/js/fontawesome.js"); ?>"></script>-->
 
     <style>
@@ -105,7 +107,7 @@ if it's not present, don't show loader */
 						if(isset($_SESSION['uid'])){
               $acctype = $_SESSION['type'];
 							if($acctype==="INSTRUCTOR"){
-								echo '<a class="dropdown-item" href="'. PROJECT_ROOT .'user/instructor/dashboard/">My Dashboard</a>';
+								echo '<a class="dropdown-item" href="'. PROJECT_ROOT .'user/instructor/dashboard/profile">My Dashboard</a>';
 							}else if($acctype==="admin"){
 								echo '<a class="dropdown-item" href="'. PROJECT_ROOT .'user/admin/dashboard/">My Dashboard</a>';
 								//echo '<a class="dropdown-item" href="userchangepass.php">Change Password</a>';

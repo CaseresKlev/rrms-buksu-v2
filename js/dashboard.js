@@ -1,5 +1,15 @@
 var notify;
 
+function playSound(filename){
+	var filename = "http://" + window.location.hostname + "/rrms-buksu/notification/" + filename;
+	var mp3Source = '<source src="' + filename + '.mp3" type="audio/mpeg">';
+	var oggSource = '<source src="' + filename + '.ogg" type="audio/ogg">';
+	var embedSource = '<embed hidden="true" autostart="true" loop="false" src="' + filename +'.mp3">';
+	document.getElementById("sound").innerHTML='<audio autoplay="autoplay">' + mp3Source + oggSource + embedSource + '</audio>';
+}
+
+
+
 function working(sender,  cancel,  action, spin_img, container, destination, param, working_entry){
 	//alert(param);
 	//alert("Action: " + action + " Spinner: " + spin_img + " container: " + container );
@@ -11,7 +21,7 @@ function working(sender,  cancel,  action, spin_img, container, destination, par
 
 	var url = "http://" + window.location.hostname + "/rrms-buksu/" + destination;
 	var http = new XMLHttpRequest();
-	var params = 'action='+ action + "&param=" + param;
+	var params = 'action='+ action +  param;
 
 	http.open('POST', url, true);
 	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -19,13 +29,14 @@ function working(sender,  cancel,  action, spin_img, container, destination, par
 	http.onreadystatechange = function() {
 		if(this.readyState == 4 && this.status == 200) {
 			//var obj = JSON.parse(this.responseText);
-			alert(this.responseText);
+			//alert(this.responseText);
 			var responce = this.responseText.split(":");
 			if(responce[1]==="error"){
-				$(container).html(responce[1]);
+				$(container).html("<b class='text-danger'>" + responce[1] + "</b>");
 			}else{
-				$(container).html(responce[1]);
-				setTimeout(function(){ $(working_entry).toggle("right"); }, 1000);
+				$(container).html("<b class='text-success'>" + responce[1] + "</b>");
+				//alert(responce[1]);
+				setTimeout(function(){ $(working_entry).toggle() }, 2000);
 			}
 			
 			//if(obj)
@@ -79,8 +90,16 @@ function doNotShow(){
 	}, 1500);
 }
 
-function showNotification(){
+function showNotification(fromLoc, alignFrom){
+	//alert(fromLoc);
 	//alert("it is notification");
+	var coor_x = 20;
+	var coor_y = 90;
+	if(fromLoc=="bottom"){
+		coor_x = 0;
+		coor_y = 20;
+	}
+
 	var message = $(".notif-message").html();
 	notify = $.notify({
 	    title: "<i class=\"fas fa-bell fa-lg\"></i> <strong>You have new Author request:</strong><br>",
@@ -92,18 +111,19 @@ function showNotification(){
 	      exit: "animated fadeOutRight"
 	    },
 	    placement: {
-	      from: "top",
-	      align: "right"
+	      from: fromLoc,
+	      align: alignFrom
 	    },
 	    type: "info",
 	    mouse_over: "pause",
-	    delay: 3000,
+	    delay: 7000,
 	    offset: {
-	      x: 20,
-	      y: 90
+	      x: coor_x,
+	      y: coor_y
 	    }
 	}
 	);
+	playSound('notif');
 }
 
 function showDetailedNotification(){
@@ -331,6 +351,50 @@ $('#use-citation').click(function(){
 	}
 })
 
+
+$(".txt-searchAuthor").on('keyup', function (e) {
+	//alert(e.keyCode);
+    if (e.keyCode == 13) {
+        var book_id = $('#book_id').val();
+	var k = $('.txt-searchAuthor').val();
+	var http = new XMLHttpRequest();
+	var url = 'validate/add-author.php';
+	var params = 'key='+ k + '&book_id='+book_id;
+	http.open('POST', url, true);
+
+	//Send the proper header information along with the request
+	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+	http.onreadystatechange = function() {	//Call a function when the state changes.
+	    if(this.readyState == 4 && this.status == 200) {
+	        //alert(this.responseText);
+	        $('#author-search-list').html("");
+	        var myObj = JSON.parse(this.responseText);
+	        if(myObj.length>0){
+	        	for (x in myObj) {
+			      var name = myObj[x].name;
+			      //alert(myObj[x].a_id);
+			      $('#author-search-list').append('<tr>'                           
+	                                +'<td>'+ name + '</td>'
+	                                +'<td><div class="badge badge-primary ml-auto btn-select-add-author" '
+	                                +' onclick="addEditAuthor('+ myObj[x].a_id +', \'added\')" >'
+	                                +'<i class="fas fa-plus"></i> Add</div>'
+	                                 +'</td>'
+	                              +'</tr>');
+
+			    }
+	        }else{
+	        	$('#author-search-list').append('<td colspan="2"><h5>No Search found Matching your query.<br>Try Again!</h5></td>')
+	        }
+		    
+		    //document.getElementById("demo").innerHTML = txt;
+		     $('#modalAuthorADD').modal("toggle");
+	    }
+	}
+	http.send(params);
+    }
+});
+
 $('#btnSearchAuthor').click(function(){
 	var book_id = $('#book_id').val();
 	var k = $('.txt-searchAuthor').val();
@@ -416,3 +480,16 @@ function removeRequest(id){
 
 	http.send(params);
 }
+
+
+
+///Update Account
+
+$('#matchpass').on('keyup',function(){
+	if($('#newpass').val()!=$('#matchpass').val()){
+		$('.hint').show();
+	}else{
+		$('.hint').hide();
+		$('#submit').prop('disabled', false);
+	}
+})

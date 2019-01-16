@@ -85,9 +85,29 @@
 							</div>
 							<div class="row">
 								<ul style="margin-top: 1rem;">
-									<li>
-										<a href="#"><b style="color: #0066ff;">Asian Award for Oral Research Presentation</b></a>
-									</li>
+									'; 
+
+										$query= "SELECT book.book_id, book.book_title, book.cover, book.link, book.aut_type, book.docloc, SUBSTRING(book.pub_date, 1, 4) as date, book.abstract, book.`keywords` FROM junc_authorbook
+INNER JOIN book on book.book_id = junc_authorbook.book_id
+WHERE book.enabled=1 AND junc_authorbook.aut_id = ? ORDER BY book.pub_date ASC ";
+										
+										$stmt = $con->prepare($query);
+										$stmt->bind_param("i", $_GET['aut_id']);
+										if($stmt->execute()){
+											$result = $stmt->get_result();
+											if($result->num_rows>0){
+												while($row=$result->fetch_assoc()){
+													echo '<li>
+										<b style="color: #0066ff;"><a href="' . PROJECT_ROOT .  'research/'. $row['date'] ."/" . $row['aut_type'] . "/" . $row['link']. '">
+								  		'. $row['book_title'] .'
+								  	</a></b>
+									</li>';
+												}
+											}
+										}
+
+
+										echo '
 								</ul>
 							</div>
 							<div class="row content-header">

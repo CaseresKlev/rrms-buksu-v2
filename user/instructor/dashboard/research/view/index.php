@@ -2,18 +2,18 @@
   
   $currentDIR =  "research";
   include($_SERVER["DOCUMENT_ROOT"] . "/rrms-buksu/includes/path.php");
-  include PROJECT_ROOT_NOT_LINK . "user/student/dashboard/preload.php";
+  include PROJECT_ROOT_NOT_LINK . "user/instructor/dashboard/preload.php";
 
   $dbconfig = new dbconfig();
   $con = $dbconfig ->getCon();
 
-  if(isset($_SESSION['uid']) && $_SESSION['type']==="STUDENT"){
+  if(isset($_SESSION['uid']) && $_SESSION['type']==="INSTRUCTOR"){
 
     //print_r($_SESSION);
     if(!isset($_GET['book'])){
       //header("Location: " . dirname( dirname(__FILE__) ));
      // $str =  dirname( dirname(__FILE__) );
-      header("Location: " . PROJECT_ROOT . "404.php");
+      //header("Location: " . PROJECT_ROOT . "404.php");
     }else{
       $query = "SELECT `id` FROM `junc_authorbook` WHERE `book_id` = ? and `aut_id` = ?";
       $stmt = $con->prepare($query);
@@ -22,7 +22,9 @@
         $result = $stmt->get_result();
         //echo $result->num_rows;
         if($result->num_rows<1){
-          header("Location: " . PROJECT_ROOT . "404.php");
+          //header("Location: " . PROJECT_ROOT . "404.php");
+        }else{
+          echo "Error here";
         }
       }
 
@@ -123,12 +125,12 @@
 	<div class="wrapper">
         <!-- Sidebar  -->
         
-         <?php  include PROJECT_ROOT_NOT_LINK . "user/student/dashboard/sidebar.php"  ?>
+         <?php  include PROJECT_ROOT_NOT_LINK . "user/instructor/dashboard/sidebar.php"  ?>
 
         <!-- Page Content  -->
         <div id="content">
           <!-- Toggle Menu  -->
-            <?php include PROJECT_ROOT_NOT_LINK . "user/student/dashboard/toggle_menu.php"; ?>
+            <?php include PROJECT_ROOT_NOT_LINK . "user/instructor/dashboard/toggle_menu.php"; ?>
 
 
            <!---- PLACE YOUR DIVS HERE --->
