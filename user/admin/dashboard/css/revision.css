@@ -1,0 +1,107 @@
+* {
+  box-sizing: border-box;
+}
+
+.revbody {
+  background-image: url("../img/BukSU-0014.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  background-attachment: fixed;
+  max-width: 70%;
+}
+
+#fileForm {
+  background-color: white;
+  margin: 100px auto;
+  font-family: Raleway;
+  padding: 40px;
+  width: 70%;
+  min-width: 300px;
+  padding-top: 0px;
+}
+
+
+
+input,textarea,select {
+  padding: 10px;
+  width: 100%;
+  font-size: 17px;
+  font-family: Raleway;
+  border: 1px solid #aaaaaa;
+
+}
+
+/* Mark input boxes that gets an error on validation: */
+input.invalid {
+  background-color: #ffdddd;
+}
+
+
+#submit {
+  background-color: #4CAF50;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 17px;
+  font-family: Raleway;
+  cursor: pointer;
+}
+.alert {
+    padding: 10px;
+    background-color: #f44336;
+    color: white;
+}
+
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}
+#myProgress {
+  width: 100%;
+  background-color: #ddd;
+}
+
+#myBar {
+  width: 1%;
+  height: 20px;
+  background-color: #4CAF50;
+}
+.button{
+  background-color: #4CAF50;
+   border: none;
+   color: white;
+   padding: 3px 10px;
+   text-align: center;
+   text-decoration: none;
+   display: inline-block;
+   font-size: 16px;
+   margin: 4px 2px;
+   cursor: pointer;
+   float: right;
+}
+.button:hover {background-color: #3e8e41;
+}
+.rrms{
+  padding-top: 20px;
+}
+
+.revfile {
+  background-color: white;
+  margin-top: -11%;
+}
+
+.revhtml {
+  padding: 0;
+}

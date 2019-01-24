@@ -150,11 +150,50 @@ $("#btn-save").click(function(){
 })
 
 $("button[id='btn-dis-delete[]").click(function(){
-	alert(thsi.name);
+	alert(this.name);
+})
+
+var curVal;
+$("div[id='btn-page-edit[]").click(function(){
+	var class_name = this.className.split(" ");
+		//alert(class_name[class_name.length-1]);
+	var com_id = class_name[class_name.length-1];
+	
+	if($(this).html()=="Edit"){
+		//alert(this.className);
+		curVal = $('#page-' + com_id).val();
+		$('#page-' + com_id).attr('readonly', false);
+		$(this).html("Cancel");
+		$(this).attr('class', 'btn btn-warning btn-sm m-1 ' + com_id);
+		$('input[name=save-' + com_id + ']').attr('class', 'btn btn-success btn-sm m-1');
+	}else{
+		$('#page-' + com_id).attr('readonly', true);
+		$('#page-' + com_id).val(curVal);
+		$(this).attr('class', 'btn btn-danger btn-sm m-1 ' + com_id);
+		$(this).html("Edit");
+	}
+	
+
+});
+
+
+
+$("input[id='save-adjustment[]']").click(function(){
+	//alert(this.attr('name'));
+	var tmp = this;
+	var temp =  $(tmp).attr('name').split("-");
+	//alert(temp[temp.length-1]);
+	var form = "#form-" + temp[temp.length-1];
+	//alert(form);
+
+	//$(form).submit();
 })
 
 
-$("button[id='page-edit[]").click(function(){
+
+
+
+/*$("button[id='page-edit[]").click(function(){
 	var todo = $(this).html();
 	var comments_id = $(this).attr("name");
 	
@@ -249,7 +288,7 @@ $("button[id='page-edit[]").click(function(){
 		//alert(page);
 	}
 	 
-})
+})*/
 
 
 $("button[id='page-cancel[]").click(function(){

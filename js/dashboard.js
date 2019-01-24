@@ -396,8 +396,10 @@ $(".txt-searchAuthor").on('keyup', function (e) {
 });
 
 $('#btnSearchAuthor').click(function(){
+	//alert("k");
 	var book_id = $('#book_id').val();
-	var k = $('.txt-searchAuthor').val();
+	var k = "";
+	k = $('.txt-searchAuthor').val();
 	var http = new XMLHttpRequest();
 	var url = 'validate/add-author.php';
 	var params = 'key='+ k + '&book_id='+book_id;
@@ -435,6 +437,52 @@ $('#btnSearchAuthor').click(function(){
 	http.send(params);
 })
 
+$('#btnSearchAuthorOnProcess').click(function(){
+	//alert("k");
+	var book_id = $('#book_id').val();
+	var k = "";
+	k = $('.txt-searchAuthor').val();
+	if(k==""){
+		alert("Please Provide name to search");
+		return;
+	}
+	var http = new XMLHttpRequest();
+	var url = 'validate/add-author.php';
+	var params = 'key='+ k + '&book_id='+book_id;
+	http.open('POST', url, true);
+
+	//Send the proper header information along with the request
+	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+	http.onreadystatechange = function() {	//Call a function when the state changes.
+	    if(this.readyState == 4 && this.status == 200) {
+	        //alert(this.responseText);
+	        $('#author-search-list').html("");
+	        var myObj = JSON.parse(this.responseText);
+	        if(myObj.length>0){
+	        	for (x in myObj) {
+			      var name = myObj[x].name;
+			      //alert(myObj[x].a_id);
+			      $('#author-search-list').append('<tr>'                           
+	                                +'<td>'+ name + '</td>'
+	                                +'<td><div class="badge badge-primary ml-auto btn-select-add-author" '
+	                                +' onclick="addEditTempAuthor('+ myObj[x].a_id +', \'added\',\''+ name + '\')" >'
+	                                +'<i class="fas fa-plus"></i> Add</div>'
+	                                 +'</td>'
+	                              +'</tr>');
+
+			    }
+	        }else{
+	        	$('#author-search-list').append('<td colspan="2"><h5>No Search found Matching your query.<br>Try Again!</h5></td>')
+	        }
+		    
+		    //document.getElementById("demo").innerHTML = txt;
+		     $('#modalAuthorADD').modal("toggle");
+	    }
+	}
+	http.send(params);
+})
+
 function addEditAuthor(id, action){
 	var book_id = $('#book_id').val();
 	var author = action +"-"+ id+ "-" + book_id;
@@ -442,6 +490,32 @@ function addEditAuthor(id, action){
 	$('#author').val(author);
 	$('#submit-author').trigger("click");
 	
+}
+
+function addEditTempAuthor(id, action, name){
+	var book_id = $('#book_id').val();
+	//var author = action +"-"+ id+ "-" + book_id;
+	var author = id + ": " + name;
+	//alert(author);
+	/*$('#author').val(author);
+	$('#submit-author').trigger("click");*/
+
+	var temp = ''+
+                      '<div class="input-group pt-1">'+
+                        '<div class="input-group-append">'+
+                          '<div class="d-none">'+
+                            '<input type="text" name="author[]" class="alert alert-info form-control" readonly value="'+ id +'">'+
+                          '</div>'+
+                        '</div>'+
+                        '<input type="text" class="alert alert-info form-control" readonly value="'+ name +'">'+
+                        '<div class="input-group-append">'+
+                          '<div class="btn btn-outline-danger" type="button" onclick="removeTempAutor(this);"><i class="fas fa-trash-alt mt-2"></i></div>'+
+                        '</div>'+
+                      '</div>'+
+                    '';
+                    $('#modalAuthorADD').modal("toggle");
+                    $('.txt-searchAuthor').val("");
+	$('.listAuthor').append(temp);
 }
 
 function removeAuthor(author, name){
@@ -454,6 +528,11 @@ function removeAuthor(author, name){
 	$('#modalAuthor').modal('toggle');
 	//var x = "#author-" + author;
 	//alert("Are you sure you want to delete " + $(x).val());
+}
+
+function removeTempAutor(sender){
+	var x = $(sender).parent().parent();
+	$(x).remove();
 }
 
 function removeRequest(id){

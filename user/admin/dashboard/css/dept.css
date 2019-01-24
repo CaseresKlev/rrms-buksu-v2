@@ -1,0 +1,112 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+.login-page {
+  width: 360px;
+  padding: 8% 0 0;
+  margin: auto;
+  margin-bottom: 30%;
+  margin-left: -20px;
+  position: fixed;
+  background-color: grey;
+
+}
+.form {
+  position: relative;
+  z-index: 1;
+  background: #c8bbbb;
+  max-width: 360px;
+  margin: 0 auto 100px;
+  margin-right: 26%;
+  padding: 19px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  margin-bottom: 40%
+
+}
+.form input {
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: lightgray;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+.form button {
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: #4CAF50;
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+.form button:hover,.form button:active,.form button:focus {
+  background: #43A047;
+}
+input[type=search] #deldept{
+    width: 130px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 12px;
+    background-color:    ;
+    background-image: url('searchicon.png');
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+input[type=search]:focus {
+    width: 100%;
+}
+.login-page{
+  width: 100%;
+}
+@media screen and (max-width:359px){
+  .login-page {
+    width: 100%;
+    padding: 8% 0 0;
+    margin: auto;
+    margin-bottom: 30%;
+  }
+  .form {
+    position: relative;
+    z-index: 1;
+    background: #c8bbbb;
+    max-width: 100%;
+    margin: 0 auto 100px;
+    padding: 19px;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    margin-bottom: 40%
+  }
+}
+@media screen and (max-width:320px){
+  .login-page {
+    width: 100%;
+    padding: 100% 0 0;
+    margin: auto;
+    margin-bottom: 30%;
+  }
+  .form {
+    position: relative;
+    z-index: 1;
+    background: #c8bbbb;
+    max-width: 100%;
+    margin: 0 auto 100px;
+    padding: 19px;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    margin-bottom: 40%
+  }
+}

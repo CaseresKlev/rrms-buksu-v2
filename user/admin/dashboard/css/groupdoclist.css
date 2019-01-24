@@ -1,0 +1,78 @@
+/* ANNE */
+ * {
+    box-sizing: border-box;
+}
+ #annegroupbody {
+  /*background-color: #d3d3d3;*/
+  background-image: url("../img/BukSU-0014.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  background-attachment: fixed;
+ 
+  margin: auto;
+}
+  .annegroup {
+   margin: auto;
+   /*padding: inherit;*/
+   padding-left: 0;
+   padding-top: 3%;
+   text-align: left;
+   width: 100%;
+   display: inline-block;
+   float: left;
+ }
+  .annegroup p {
+   font-size: larger;
+   color: grey;
+  }
+  #anne-a {
+   float: left;
+ }
+
+ #pub em{
+  font-weight: bold;
+ }
+
+ #pub td{
+  padding-left: 10px;
+ }
+ /*.annebooks {
+  text-align: right;
+  margin-right: 32%;
+  margin-top: 10%;
+  float: right;
+}*/
+ .annegroupbook {
+  padding-top: 12%;
+  width: 100%;
+}
+
+
+ .annegrouplist {
+   background-color: white;
+}
+
+.grouprow {
+  padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.grouptable {
+    max-width: 100%;
+
+}
+
+.subrevision {
+
+}
+
+.bookchar {
+  width: 50%;
+}
+
+.annegroup {
+  background-color: white;
+}

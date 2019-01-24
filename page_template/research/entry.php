@@ -185,45 +185,61 @@
                                     <h3>Research History</h3>
                                     <div class="col-md-12" style="text-align: justify; border-top: 1px solid black;">
                                         <ul>';
-                                        $query = 'SELECT * FROM `bookhistory` WHERE `book_id` = ' . $book_id;
-                                            $history = $con->query($query);
-                                            if($history){
-                                                while($historyRow = $history->fetch_assoc()){
-                                                    if($historyRow['book_stat']==="Unpublished"){
-                                                        echo '
-                                                    <li style="padding-top: 10px;">
-                                                        <h6>Unpublished / Submited on'; 
+                                        $result = $con->query("SELECT `id`, `book_stat`, `date` FROM `bookhistory` WHERE book_id = " . $book_id);
+                                        if($result->num_rows>0){
 
-                                                        $date = $historyRow['date'];
-                                                                $sdate=date_create($date); 
-                                                                echo ' ' . date_format($sdate,'F d, Y');
+                                            while ($row = $result->fetch_assoc()) {
+                                              //print_r($row);
+                                              echo '<li class="py-2">';
+                                               $date = new DateTime($row['date']);
 
-                                                        echo '</h6>
-                                                    </li>';
-                                                    }else if($historyRow['book_stat']==="Utilized"){
-                                                      $query = "SELECT * FROM `utilize` WHERE `book_id` = " . $book_id;
-                                                      $utilize = $con->query($query);
-                                                      if($utilize){
-                                                        while($utilizedRow = $utilize->fetch_assoc()){
-                                                            echo '
-                                                              <li style="padding-top: 10px;">
-                                                                  <h6>Utilize at ' . $utilizedRow['orgname'] . ', ' . $utilizedRow['orgaddress'] . " last ";
+                                                if($row['book_stat']==="Unpublished"){
+                                                  
+                                                  echo "Submitted on " . $date ->format('F jS, Y');
+                                                }else if($row['book_stat']==="Utilized"){
 
-                                                                  $date = $historyRow['date'];
-                                                                          $sdate=date_create($date); 
-                                                                          echo ' ' . date_format($sdate,'F d, Y');
+                                                  $stmt = $con->prepare("SELECT * FROM `utilize` WHERE `book_id` = ?");
+                                                  $stmt->bind_param("i", $book_id);
+                                                  if($stmt->execute()){
+                                                    $resultUtil = $stmt->get_result();
+                                                    if($resultUtil->num_rows>0){
 
-                                                                  echo '</h6>
-                                                              </li>';
-                                                      
-                                                        }
-                                                      }
-                                                      
-
+                                                      $util = $resultUtil->fetch_assoc();
+                                                      $date = new DateTime($util['date']);
+                                                      echo $row['book_stat'] . " on " . $date ->format('F jS, Y') . " at " . $util['orgname'] . " - " . $util['orgaddress'];
                                                     }
-                                                    
+
+                                                  }
+
+                                                  
+                                                }else if($row['book_stat']==="Published"){
+                                                  $stmt = $con->prepare("SELECT * FROM `published` WHERE `history` = ?");
+                                                  $stmt->bind_param("i", $row['id']);
+                                                  $stmt->execute();
+                                                  $resultPub = $stmt->get_result();
+                                                  if($resultPub->num_rows>0){
+                                                    $pub = $resultPub->fetch_assoc();
+                                                    $date = new DateTime($pub['date']);
+                                                    echo $row['book_stat'] . " with ISBN #: " . $pub['issn'] . " at " . $pub['journal'] . " a " . $pub['type'] . " last " . $date->format('F jS, Y');
+                                                  }
+                                                }else if($row['book_stat']==="Disseminated"){
+                                                  $stmt = $con->prepare("SELECT * FROM `disseminated` WHERE `history` = ?");
+                                                  $stmt->bind_param("i", $row['id']);
+                                                  $stmt->execute();
+                                                  $resultDis = $stmt->get_result();
+                                                  if($resultDis->num_rows>0){
+                                                    $dis = $resultDis->fetch_assoc();
+                                                    $date = new DateTime($pub['date']);
+                                                    echo $row['book_stat'] . " during \"" . $dis['convension'] . "\" at " . $dis['location'] . " last " . $date->format('F jS, Y');
+                                                  }
+                                                }else{
+                                                  $date = new DateTime($row['date']);
+                                                  echo $row['book_stat'] . " last " . $date->format('F jS, Y');
                                                 }
+                                               echo "</li>";
+                                               
                                             }
+                                        }
 
                                             
                                         echo '</ul>

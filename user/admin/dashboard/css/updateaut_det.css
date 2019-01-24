@@ -1,0 +1,42 @@
+/* ANNE */
+
+* {
+    box-sizing: border-box;
+}
+
+
+.updateautbody {
+  margin: auto;
+  background: #F8F8FF;
+  max-width: 70%;
+}
+
+.annesearchbox {
+  font-size: 14pt;
+  width: 80%;
+
+}
+
+.authorsearch button {
+  font-size: 14pt;
+  position: absolute;
+}
+
+.authorsearch {
+  margin-top: 5%;
+}
+
+.annefield {
+  margin-top: 10%;
+}
+
+.annefield input[type=text] {
+  padding: 1%;
+  width: 100%;
+  font-size: 14pt;
+}
+
+.annefield button {
+  font-size: 14pt;
+  float: right;
+}

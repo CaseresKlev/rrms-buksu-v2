@@ -1,0 +1,58 @@
+/* ANNE */
+
+* {
+    box-sizing: border-box;
+}
+
+#annebody {
+  background-image: url("../img/BukSU-0014.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  background-attachment: fixed;
+
+  margin: auto;
+}
+
+
+ .anneauthor {
+      margin: auto;
+   /* padding: inherit; */
+    padding-left: 0;
+    padding-top: 3%;
+    text-align: left;
+    width: 100%;
+    display: inline-block;
+    margin-left: 5%;
+ }
+
+ .anneauthor p {
+   font-size: larger;
+   color: darkgray;
+
+ }
+
+ #anne-a {
+   float: left;
+ }
+
+
+.annebooks {
+  display: block;
+  width: 100%;
+  margin-left: 5%
+}
+
+
+.annelist {
+  float: left;
+  margin-right: 75%;
+  margin-left: 3%;
+}
+
+.fullauthor {
+  /*background-color: rgba(214, 214, 194, .50);*/
+  background-color: white;
+  height: -webkit-fill-available;
+}

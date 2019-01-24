@@ -1,6 +1,14 @@
             
 
 <div class="container rounded mt-5 shadow">
+                <?php 
+                  if(isset($_GET['msg'])){
+                    echo '<div class="alert alert-' . $_GET['alertType'] . '" role="alert">'. $_GET['msg'] .'</div>';
+                  }
+
+                ?>
+                
+
                 <div class=" container bg-dark text-white ml-0">
                   <h4>Summary of Comments and Suggestion</h4>
                 </div>
@@ -14,6 +22,7 @@
                         <th scope="col">Parts of Manuscript</th>
                         <th scope="col">Comments / Suggestion</th>
                         <th scope="col">Page</th>
+                        <th scope="col">Page Adjustment</th>
                         <th scope="col">Action</th>
                       </tr>
                     </thead>
@@ -26,12 +35,40 @@
                       $result = $con -> query($query);
                       if($result->num_rows>0){
                         while ($rowCom = $result->fetch_assoc()) {
-
                           echo '<tr><td scope="col">'. $rowCom['parts'] .'</td>
                       <td scope="col">'. $rowCom['comments'] .'
                       </td>
-                      <td scope="col"> <input class="form-control input-md" id="pageno-'. $rowCom['id'] .'" type="text" style="font-weight: bold; pattern="[0-9-]{3}" name="'. $rowCom['id'] .'"readonly value="'. $rowCom['page'] .'"></td>
-                      <td scope="col"><button class="btn btn-danger btn-md" id="page-edit[]" name="'. $rowCom['id'] .'">Edit</button></td></tr>';
+  
+                        <td scope="col">
+                          ' . $rowCom['page'].'
+                        </td>
+                        <form action="adjust-page/" method="POST" id="form-'. $rowCom['id'] .'">
+                        <td>
+                            <input type="text" class="form-control" readonly id="page-'. $rowCom['id'] .'" value="'. $rowCom['adjustment'] .'" name="page" required>
+                            <input type="number" value="' . $rowCom['id'] . '" name="id" readonly class="d-none">
+                            <input type="text" value="?trail=' . $_GET['trail'] . '&book='. $_GET['book'] .'" name="prev" readonly class="d-none">
+                          
+                        </td>
+                        <td scope="col">
+                          <div class="btn btn-danger btn-sm m-1 '. $rowCom['id'] .'" id="btn-page-edit[]">Edit</div>
+                          <input type="submit" value="Save" class="btn btn-success btn-sm m-1 d-none" id="save-adjustment[]" name="save-'. $rowCom['id']. '">
+                        </td>
+                      </form>
+                      </tr>';
+                          /*echo '<tr><td scope="col">'. $rowCom['parts'] .'</td>
+                      <td scope="col">'. $rowCom['comments'] .'
+                      </td>
+  
+                        <td scope="col">
+                        
+                          <input class="form-control input-md" id="pageno-'. $rowCom['id'] .'" type="text" style="font-weight: bold; pattern="[0-9-]{3}" name="'. $rowCom['id'] .'"readonly value="'. $rowCom['page'] .'"
+                        </td>
+                        <td scope="col">
+                          <button class="btn btn-danger btn-md" id="page-edit[]" name="'. $rowCom['id'] .'">Edit</button>
+                          <input type="submit" value="Save" class="btn btn-success">
+                        </td>
+                      </form>
+                      </tr>';*/
                         }
                       }else{
                         echo '                      <tr>

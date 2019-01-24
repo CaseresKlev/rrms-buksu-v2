@@ -96,14 +96,18 @@
         <div id="content">
           <!-- Toggle Menu  -->
             <?php include PROJECT_ROOT_NOT_LINK . "user/instructor/dashboard/toggle_menu.php"; ?>
-
+            <div class="alert alert-info" role="alert">
+              <button type="button" class="close" style="margin-right: 10px;" onclick="this.parentElement.style.display='none'"; aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+             <strong>Note:</strong> If you have completed, published or disseminated paper which are not found here. Notify the Research Unit in order to add your research.
+           </div>
 
            <!---- PLACE YOUR DIVS HERE --->
            
            <div class="container mb-3" style="padding-bottom: 15px; background-color: #e1e1d0; min-height: 40%;">
             <div class="row bg-dark text-white data-head">
               My Completed / Published Research
-              <a href="add/" class="badge badge-success ml-auto" style="margin: auto; margin-right: 10px;"><i class="fas fa-plus"></i> Add</a>
             </div>
               <?php
               $onGoing = array();
@@ -144,7 +148,7 @@
            <div class="container" style="padding-bottom: 15px; background-color: #e1e1d0; min-height: 40%;">
             <div class="row bg-dark text-white data-head">
               On-Going Research
-              <a href="add/" class="badge badge-success ml-auto" style="margin: auto; margin-right: 10px;"><i class="fas fa-plus"></i> Add</a>
+              <a href="add/on-process/" class="badge badge-success ml-auto" style="margin: auto; margin-right: 10px;"><i class="fas fa-plus"></i> Add</a>
             </div>
               <?php
               

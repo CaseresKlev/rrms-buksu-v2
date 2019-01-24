@@ -1,0 +1,47 @@
+/* ANNE */
+
+* {
+    box-sizing: border-box;
+}
+
+#supportbody {
+  background-image: url("../img/BukSU-0014.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  background-attachment: fixed;
+  max-width: 70%;
+  margin: auto;
+}
+
+
+ .annesupport {
+      margin: auto;
+   /* padding: inherit; */
+    padding-left: 0;
+    padding-top: 3%;
+    text-align: left;
+    width: 100%;
+    display: inline-block;
+    background-color: white;
+ }
+
+
+.annedocument {
+  display: block;
+  width: 100%;
+  background-color: white;
+}
+
+
+.supportdocu {
+  float: left;
+  margin-right: 75%;
+  background-color: white;
+}
+
+.anneul {
+  text-align: left;
+  position: absolute;
+}

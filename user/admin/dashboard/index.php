@@ -1,5 +1,1 @@
-<?php
-
-echo "Admin Dashboard";
-
-?>
+<?php header("Location: admindashboard.php") ?>

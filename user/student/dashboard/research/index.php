@@ -122,9 +122,9 @@
               }
                
             }else{
-              echo '<div class="bg-danger text-center text-white rounded" style="">
+              echo '<div class="alert alert-danger text-dark text-white rounded" style="">
                <!--<span class="closebtn" onclick="this.parentElement.style.display=\'none\';">&times;</span>-->
-               <button type="button" class="close btn-danger" style="margin-right: 10px;" onclick="this.parentElement.style.display=\'none\'"; aria-label="Close">
+               <button type="button" class="close" style="margin-right: 10px;" onclick="this.parentElement.style.display=\'none\'"; aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
                You dont have research added yet.

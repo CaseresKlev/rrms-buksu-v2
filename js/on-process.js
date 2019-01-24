@@ -1,4 +1,4 @@
-$("button[id='page-edit[]").click(function(){
+/*$("button[id='page-edit[]").click(function(){
 	var todo = $(this).html();
 	var comments_id = $(this).attr("name");
 	var book_id = $("#pageno").attr("name");
@@ -40,7 +40,7 @@ $("button[id='page-edit[]").click(function(){
 		//alert(page);
 	
 	 
-})
+})*/
 
 
 

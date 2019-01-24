@@ -1,0 +1,18 @@
+/* ANNE */
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+  
+  margin: auto;
+}
+
+.anneauthor h3, p {
+  margin: auto;
+  text-align: center;
+  padding: inherit;
+
+}

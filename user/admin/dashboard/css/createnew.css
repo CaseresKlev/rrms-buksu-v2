@@ -1,0 +1,165 @@
+.createbody {
+  background-image: url("../img/BukSU-0014.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  background-attachment: fixed;
+}
+
+
+
+div ins{
+
+  width: 100%;
+
+
+}
+
+
+.boxx{
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.boxx{
+  width: 600px;
+  padding: 40px;
+  position: absolute;
+  top: 57%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background: #003951;
+  text-align: center;
+  color: white;
+  margin-bottom: 5%;
+  box-shadow: 0px 10px 10px 0px rgba(255, 255, 255, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+
+}
+
+
+.ins
+{
+  width: 100%;
+border: 0;
+background: none;
+display: block;
+margin: 14px auto;
+ text-align: center;
+border: 2px solid #3498db;
+padding: 10px 0px;
+outline: none;
+color: black;
+border-radius: 15px;
+transition: 0.25s;
+color:white;
+
+
+}
+table{
+cellspacing:10;
+
+}
+.stud{
+  width: 100%;
+border: 0;
+background: none;
+display: block;
+margin: 14px auto;
+text-align: center;
+border: 2px solid #3498db;
+padding: 10px 0px;
+outline: none;
+color: white;
+border-radius: 15px;
+transition: 0.25s;
+
+
+}
+.boxx input[type= "text"]:focus, .boxx input[type="text"]:focus, .boxx input[type="password"]:focus{
+
+  border-color: #2ecc71;
+
+}
+input[type="submit"]{
+border: 2px solid #3498db;
+}
+.boxx input[type="button"]:hover{
+  background: #2ecc71;
+}
+
+.boxx h1{
+color: white;
+text-transform: uppercase;
+font-weight: 500;
+margin-top: 5%;
+}
+
+label.choose select {
+	padding: 10px 42px 10px 10px;
+	background: #f8f8f8;
+	color: #444;
+	border: 1px solid #aaa;
+	border-radius: 0;
+	display: inline-block;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	cursor: pointer;
+	outline: none;
+  margin-bottom: 10%;
+}
+label.choose select:-moz-focusring {
+	color: transparent;
+	text-shadow: 0 0 0 #444;
+}
+label.choose select::-ms-expand {
+	display: none;
+}
+label.choose:before {
+	content: '';
+	right: 5px;
+	top: -7px;
+	width: 30px;
+	height: 33px;
+	background: #f8f8f8;
+	position: absolute;
+	pointer-events: none;
+	display: block;
+}
+label.choose { position: relative; }
+label.choose:after {
+	content: '>';
+	font: 16px Consolas, monospace;
+	color: #444;
+	-webkit-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	transform: rotate(90deg);
+	right: 2px;
+	top: -3px;
+	border-bottom: 1px solid #aaa;
+	position: absolute;
+	pointer-events: none;
+	width: 34px;
+	padding: 0 0 5px 0;
+	text-indent: 14px;
+}
+@media screen\0 {
+	label.choose:after {
+		width: 38px;
+		text-indent: 15px;
+        right: 0;
+	}
+}
+@media screen and (min--moz-device-pixel-ratio:0) {
+	label.choose select { padding-right: 40px; }
+	label.choose:before { right: 6px; }
+	label.choose:after {
+		text-indent: 14px;
+		right: 6px;
+		top: -5px;
+		width: 36px;
+	}
+}

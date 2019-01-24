@@ -1,0 +1,108 @@
+/* ANNE */
+
+.body-login{
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  /*background: #e3dac9;*/
+  background-image: url("../img/BukSU-0014.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  background-attachment: fixed;
+}
+.boxx-login{
+  width: 340px;
+  padding: 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background: #003951;
+  text-align: center;
+  color: white;
+  font-size: 11pt;
+  box-shadow: 0px 10px 10px 0px rgba(255, 255, 255, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+}
+.boxx-login input[type= "text"], .boxx-login input[type="text"], .boxx-login input[type="password"]{
+border: 0;
+background: none;
+display: block;
+margin: 20px auto;
+text-align: center;
+border: 2px solid #3498db;
+padding: 14px 10px;
+width: 200px;
+outline: none;
+color: white;
+border-radius: 24px;
+transition: 0.25s;
+}
+.boxx-login h1{
+color: white;
+text-transform: uppercase;
+font-weight: 500;
+}
+.boxx-login input[type= "text"]:focus, .boxx-login input[type="text"]:focus, .boxx-login input[type="password"]:focus{
+  width: 280px;
+  border-color: #2ecc71;
+}
+.boxx-login input[type="button"]{
+  border: 0;
+  background: none;
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  border: 2px solid #3498db;
+  padding: 14px 10px;
+  width: 120px;
+  outline: none;
+  color: white;
+  border-radius: 24px;
+  transition: 0.25s;
+  cursor: pointer;
+  float: left;
+}
+
+.boxx-login input[type="reset"]{
+  border: 0;
+  background: none;
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  border: 2px solid #3498db;
+  padding: 14px 10px;
+  width: 120px;
+  outline: none;
+  color: white;
+  border-radius: 24px;
+  transition: 0.25s;
+  cursor: pointer;
+  float: right;
+}
+
+.boxx-login input[type="button"]:hover, input[type="reset"]:hover, input[type="submit"]:hover{
+  background: #2ecc71;
+}
+
+#msg {
+  float: none;
+  margin-top: 30%;
+}
+
+#link-login {
+  margin-top: 100%;
+  float: none;
+  text-align: center;
+  padding: 20px;
+}
+#link-login:hover, a:hover{
+color: green;
+}
+.checboxx input[type="checkbox"]{
+
+  color: white;
+  text-decoration-color: white;
+}

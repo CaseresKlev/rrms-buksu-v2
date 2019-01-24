@@ -1,0 +1,121 @@
+
+* {
+    box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    height: auto; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+input[type=text], input[type=file], input[type=date],textarea, select{
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #807979;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin: 0 auto;
+  text-align: left;
+
+}
+
+.dot1{
+    height: 20px;
+    width: 20px;
+    background-color: #33ff33;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot2{
+    height: 20px;
+    width: 20px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+
+div.para{
+  text-align: left;
+
+}
+#bookDet{
+  text-align: left;
+  color: white;
+
+}
+#enclosure {
+    background-color: #63b6f7a3;
+    /* margin: 100px auto;
+     margin-bottom: 10px;
+    margin-top: 20px;
+    font-family: Raleway;
+    /* padding: 40px;
+    padding-bottom: 60px;
+    /* max-width: 70%;
+    min-width: 300px;
+    text-align: left;
+  */
+    margin: 100px auto;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    font-family: Raleway;
+    padding: 40px;
+    padding-bottom: 60px;
+    /* max-width: 70%; */
+    min-width: 300px;
+    text-align: left;
+}
+
+h1 {
+  text-align: center;
+  text-align: center;
+  text-transform: uppercase;
+  color: black;
+  font-family: "Century Gothic";
+  background-color: rgba(242, 242, 242, 0.8);
+  padding-top: 2%;
+  padding-bottom: 2%;
+
+}
+button {
+  background-color: #4CAF50;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 17px;
+  font-family: Raleway;
+  cursor: pointer;
+  top: 20%;
+  border-bottom: 10%;
+
+}
+
+.add-body{
+  background-image: url("../img/BukSU-0014.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  background-attachment: fixed;
+}
+.browse{
+  text-align: left;
+}
+button[type=submit]{
+  padding: 100%;
+}

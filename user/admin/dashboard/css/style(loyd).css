@@ -1,0 +1,143 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12pt;
+  /**	padding: 100px;*/
+	margin-left: auto;
+  margin-right: auto;
+
+
+}
+#image-cover{
+
+}
+
+#content-det .image:hover{
+  opacity: 0.2;
+  border: 2px solid red;
+}
+
+/*.middle {
+  transition: .3s ease;
+  opacity: 0;
+  position: absolute;
+  top: 20%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}*/
+
+.middle {
+  
+  opacity: 0;
+  position: absolute;
+  
+}
+
+
+
+.text {
+  /*background-color: white;*/
+  color: black;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 16px 32px;
+}
+
+
+
+#cover-img {
+  opacity: 1;
+  display: block;
+  transition: .5s ease;
+  backface-visibility: hidden;
+}
+.content {
+  height: auto;
+  padding-left: 1px;
+  padding-top: 3%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.gallery {
+  align-content: center;
+}
+
+.gallery:hover {
+  border: 3px borde-color: black;
+}
+
+.gallery img {
+  width: 100%;
+  height: 250px;
+  align-content: center;
+}
+
+.gallery .title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+  /**padding: 10px;*/
+  margin-right: 38px;
+
+}
+
+.gallery #name-title{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
+
+}
+div .title{
+  white-space: nowrap;
+   width: 160px;
+   overflow: hidden;
+   text-overflow: ellipsis;
+}
+
+.responsive {
+  padding: 1%;
+  float: left;
+  width: 24.9%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media screen and (max-width:800px) {
+  .responsive {
+    width: 49.99999%;
+    margin: 6px 0;
+  }
+}
+
+@media screen and (max-width:485px) {
+  .responsive {
+    width: 100%;
+  }
+}
+
+.wrapimg {
+  display: block;
+  position: relative;
+  background-color: #f9f9f9;
+  min-width: 300px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+
+html {
+  /*background: #e3dac9;*/
+  background-image: url("../img/BukSU-0014.png");
+  background-repeat:no-repeat;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  background-attachment: fixed;
+}
+
+.content img:hover {
+  border: 3px solid black;
+}

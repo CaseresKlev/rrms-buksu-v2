@@ -119,7 +119,7 @@
               }
               //echo "$alertType";
               echo '
-              <div class="bg-'. $alertType .' text-center text-white rounded" style="margin-bottom: 40px;">
+              <div class="alert alert-'. $alertType .' text-center text-white rounded" style="margin-bottom: 40px;" role="alert">
                <!--<span class="closebtn" onclick="this.parentElement.style.display=\'none\';">&times;</span>-->
                <button type="button" class="close btn-danger" style="margin-right: 10px;" onclick="this.parentElement.style.display=\'none\'"; aria-label="Close">
                   <span aria-hidden="true">&times;</span>

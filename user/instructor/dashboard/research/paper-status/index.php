@@ -88,7 +88,7 @@
                   $stmt->bind_param("i", $_GET['book']);
                   if(!$stmt->execute()){
                   	
-                  	echo '<h1 class="text-center text-white bg-danger">The page you are looking for is NOT FOUND on this Server!</h1>';
+                  	echo '<div class="alert alert-danger">We couldn\'t find the history of this research. it may happen that this research was uploaded by a student or uploaded as Finished Research by the Author.</div>';
                   	exit();
                   }
 
@@ -97,7 +97,7 @@
                     $row = $result->fetch_assoc();
                   }else{
                   	//header("Location: " . PROJECT_ROOT . "404.php");
-                  	echo '<h1 class="text-center text-white bg-danger">The page you are looking for is NOT FOUND on this Server!</h1>';
+                  	echo '<div class="alert alert-danger">We couldn\'t find the history of this research. This may happen when this research was uploaded by a student or uploaded as Finished Research by the Author.</div>';
                   	exit();
                   }
 

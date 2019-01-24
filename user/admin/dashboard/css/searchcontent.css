@@ -1,0 +1,37 @@
+/* ANNE */
+
+body {
+  font-size: 120%;
+  background: #F8F8FF;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#cover-img: hover{
+
+}
+li{
+
+  color:blue;
+}
+li span{
+  color:black;
+}
+.box {
+	width: 95%;
+  display: block;
+	margin: 50px auto 0px;
+	color: white;
+	background: rgba(#25d6db,0);
+	/*border: 1px solid #B0C4DE;*/
+	border-bottom: none;
+	border-radius: 10px 10px 0px 0px;
+	padding: 20px;
+}
+ #ambot {
+   width: 95%;
+   display: block;
+   margin-left: inherit;
+   color: black;
+ }

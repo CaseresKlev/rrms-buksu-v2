@@ -105,8 +105,9 @@
           $desc = "";
           //$trail_id = "";
           $origin = "";
-          $query = "SELECT paper_trail.id, book.book_title, paper_stat.title, paper_stat.Description, isdone, date FROM paper_trail INNER JOIN book on book.book_id = paper_trail.book_id INNER JOIN paper_stat on paper_stat.id = paper_trail.p_sat_id WHERE paper_trail.id = ?";
+          $query = "SELECT paper_trail.id, paper_trail.file_alias, book.book_title, paper_stat.title, paper_stat.Description, isdone, date FROM paper_trail INNER JOIN book on book.book_id = paper_trail.book_id INNER JOIN paper_stat on paper_stat.id = paper_trail.p_sat_id WHERE paper_trail.id = ?";
           //echo $query;
+          $file_alias = "";
           $stmt = $con->prepare($query);
           $stmt->bind_param("i", $_GET['trail']);
           if(!$stmt->execute()){
@@ -121,6 +122,7 @@
             $desc = $row['Description'];
             $trail_id = $row['id'];
             $book_title = $row['book_title'];
+            $file_alias = $row['file_alias'];
             //$origin = $row['origin'];
           }else{
           	echo '<h1 class="text-center bg-danger text-white">The page you are looking for is <br>NOT FOUND on this server!</h1>';
@@ -292,108 +294,11 @@
 
               ?>
               
-              <div class="container">
-                
-                <br>
-
-                     <?php
-                    $con= $dbconfig -> getCon();
-                  $query= "SELECT `documents`, `orig_name` FROM `documents` WHERE `book_id` = ? LIMIT 5 ";
-                  $stmt = $con->prepare($query);
-                  $stmt->bind_param("i", $_GET['book']);
-                  if(!$stmt->execute()){
-                  	echo '<h1 class="text-center text-white bg-danger">The page you are looking for is not found on this server.</h1>';
-                  	exit();
-                  }
-                  $result2 = $stmt->get_result();
-                  if($result2->num_rows>0){
-                    echo '<br><br><div class="row">
-                      <div class="col-md-12" style="font-size: 18pt; font-weight: bold;">
-                       Files and Certificates
-                      </div>
-
-                      <div class="col-md-12" style="width: 100%; height: 2px; background-color: blue;"></div>
-                        <br>
-
-                        <div class="col-md-12">
-                          <em style="color: red;">
-                              <ul>';
-                    while ($row=$result2->fetch_assoc()) {
-                      echo '<li><a href="'. $row['documents'] .'">'. $row['orig_name'] .'</a></li>';
-                    }
-                    echo '</ul>
-                          </em>
-
-                        </div>
-                        <div class="col-md-12" style="font-weight: bold; font-size: 14pt; padding-left: 30px; color: #0052cc; "><a style="text-decoration: underline;" href="documents.php?book_id='. $book_id .'">View all Documents of this paper</a></div>
-
-                    </div>
-
-                  </div><br>';
-                  }
-
-                  ?>
-
-
-              </div>
+              
             <!--addnew  modal-->
-                <div class="modal fade" id="modaladdnew" role="dialog">
-                    <div class="modal-dialog">
+                
 
-                      <!-- Modal content-->
-                      <div class="modal-content">
-                        <div class="modal-header">
-
-                          <h4 class="modal-title" id="modal-title">Change Revision 1</h4>
-                          <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                          <form id="fileForm-change">
-
-                              <div class="form-group" style="">
-
-                                <input type="file" class="form-control-file" id="file-change"  name="file">
-
-                              </div>
-
-                          </form>
-                        </div>
-                        <div class="modal-footer">
-                          <button class="btn btn-success" id="change">Submit</button>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="modal fade" id="modalsubmit" role="dialog">
-                    <div class="modal-dialog">
-
-                      <!-- Modal content-->
-                      <div class="modal-content">
-                        <div class="modal-header">
-
-                          <h4 class="modal-title" id="modal-title">Upload Revision </h4>
-                          <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                          <form id="fileForm-upload">
-
-                              <div class="form-group" style="">
-
-                                <input type="file" class="form-control-file" id="file-upload"  name="file-upload">
-
-                              </div>
-
-                          </form>
-                        </div>
-                        <div class="modal-footer">
-                          <button class="btn btn-success" id="uploadpaper">Submit</button>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
+                  
 
                   <!--dissemination modal-->
                   <div class="modal fade" id="modaldis" role="dialog">
@@ -449,7 +354,7 @@
     <script src="<?php echo(PROJECT_ROOT . "js/bootstrap.min-4.1.0.js") ?>"></script>
     <script src="<?php echo PROJECT_ROOT . "js/searchdoc.js" ?>"></script>
     <script src="<?php echo PROJECT_ROOT . "js/dashboard.js" ?>"></script>
-    <script src="<?php echo PROJECT_ROOT . "js/on-process.js" ?>"></script>
+    <!--<script src="<?php echo PROJECT_ROOT . "js/on-process.js" ?>"></script>-->
 
     <script type="text/javascript">
         $(document).ready(function () {

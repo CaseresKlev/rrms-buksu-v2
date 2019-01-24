@@ -231,6 +231,14 @@
                       </div>
                     </div>
                   </div>
+                  <div class="container data-group leftControl">
+                    <div class="row bg-success text-white data-head" style="padding-right: 5px;">
+                      Status: Completed
+                    </div>
+                    <div class="row data-content">
+                      <a href="../paper-status/?book=<?php echo $bookDet['book_id'];?>">View history</a>
+                    </div>
+                  </div>
 
               </div>
               <div class="col-md-9 rightContent">
@@ -338,7 +346,7 @@
                         <label for="department" id="label-department" style="display: none;">Select Department</label>
                         <select class="form-control onEdit" id="department" name="department">
                         <?php  
-                          $result=$con->query("SELECT * FROM `department` where id!=20 ORDER by college asc");
+                          $result=$con->query("SELECT * FROM `department` where 1 ORDER by college asc");
                           echo $result->num_rows;
                           if($result->num_rows>0){
                             while ($row=$result->fetch_assoc()) {
@@ -403,15 +411,15 @@
                     </div>
                     <div class="row data-content">
                       <div class="text onView edit-Keywords">
-                        <ul>
                           <?php  
 
 
-                            $result = $con->query("SELECT `book_stat`, `date` FROM `bookhistory` WHERE book_id = " . $_GET['book']);
+                            $result = $con->query("SELECT `id`, `book_stat`, `date` FROM `bookhistory` WHERE book_id = " . $_GET['book']);
                             if($result->num_rows>0){
 
                                 while ($row = $result->fetch_assoc()) {
-                                  echo "<li>";
+                                  //print_r($row);
+                                  echo '<div class="alert alert-info" role="alert">';
                                    $date = new DateTime($row['date']);
 
                                     if($row['book_stat']==="Unpublished"){
@@ -422,10 +430,10 @@
                                       $stmt = $con->prepare("SELECT * FROM `utilize` WHERE `book_id` = ?");
                                       $stmt->bind_param("i", $_GET['book']);
                                       if($stmt->execute()){
-                                        $result = $stmt->get_result();
-                                        if($result->num_rows>0){
+                                        $resultUtil = $stmt->get_result();
+                                        if($resultUtil->num_rows>0){
 
-                                          $util = $result->fetch_assoc();
+                                          $util = $resultUtil->fetch_assoc();
                                           $date = new DateTime($util['date']);
                                           echo $row['book_stat'] . " on " . $date ->format('F jS, Y') . " at " . $util['orgname'] . " - " . $util['orgaddress'];
                                         }
@@ -433,8 +441,32 @@
                                       }
 
                                       
+                                    }else if($row['book_stat']==="Published"){
+                                      $stmt = $con->prepare("SELECT * FROM `published` WHERE `history` = ?");
+                                      $stmt->bind_param("i", $row['id']);
+                                      $stmt->execute();
+                                      $resultPub = $stmt->get_result();
+                                      if($resultPub->num_rows>0){
+                                        $pub = $resultPub->fetch_assoc();
+                                        $date = new DateTime($pub['date']);
+                                        echo $row['book_stat'] . " with ISBN #: " . $pub['issn'] . " at " . $pub['journal'] . " a " . $pub['type'] . " last " . $date->format('F jS, Y');
+                                      }
+                                    }else if($row['book_stat']==="Disseminated"){
+                                      $stmt = $con->prepare("SELECT * FROM `disseminated` WHERE `history` = ?");
+                                      $stmt->bind_param("i", $row['id']);
+                                      $stmt->execute();
+                                      $resultDis = $stmt->get_result();
+                                      if($resultDis->num_rows>0){
+                                        $dis = $resultDis->fetch_assoc();
+                                        $date = new DateTime($pub['date']);
+                                        echo $row['book_stat'] . " during \"" . $dis['convension'] . "\" at " . $dis['location'] . " last " . $date->format('F jS, Y');
+                                      }
+                                    }else{
+                                      $date = new DateTime($row['date']);
+                                      echo $row['book_stat'] . " last " . $date->format('F jS, Y');
                                     }
-                                   echo "</li>";
+                                   echo "</div>";
+                                   
                                 }
                             }
                             
@@ -444,7 +476,6 @@
                             
                             
                           ?>
-                        </ul>
                       </div>
                     </div>
                   </div>

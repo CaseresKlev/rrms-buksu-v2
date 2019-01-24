@@ -109,7 +109,7 @@ if it's not present, don't show loader */
 							if($acctype==="INSTRUCTOR"){
 								echo '<a class="dropdown-item" href="'. PROJECT_ROOT .'user/instructor/dashboard/profile">My Dashboard</a>';
 							}else if($acctype==="admin"){
-								echo '<a class="dropdown-item" href="'. PROJECT_ROOT .'user/admin/dashboard/">My Dashboard</a>';
+								echo '<a class="dropdown-item" href="'. PROJECT_ROOT .'user/admin/dashboard/admindashboard.php">My Dashboard</a>';
 								//echo '<a class="dropdown-item" href="userchangepass.php">Change Password</a>';
 							}else if($acctype==="publisher"){
                 echo '<a class="dropdown-item" href="'. PROJECT_ROOT .'user/publisher/dashboard/">My Dashboard</a>';

@@ -55,7 +55,7 @@
 					  
 					  <button type="button" class="btn btn-primary" id="submit" style="width: 100%">Submit</button>
 				</form>
-			<center><a href="#"><small class="text-center">Create New Account</small></a></center>
+			<center><a href="create-account.php"><small class="text-center">Create New Account</small></a></center>
 		</div>
 	<script>
 

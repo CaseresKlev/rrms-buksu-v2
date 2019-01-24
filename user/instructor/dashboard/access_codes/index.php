@@ -16,6 +16,12 @@
       $author = $result->fetch_assoc();
       //print_r($author);
   }
+
+  $query = "DELETE FROM `acesskey` WHERE `ins_id` = ? and `used` = 1;";
+  $stmt = $con->prepare($query);
+  $stmt->bind_param("i", $_SESSION['uid']);
+  
+  if(!$stmt->execute()){};
  
 ?>
 
@@ -81,23 +87,36 @@
 
 
            <!---- PLACE YOUR DIVS HERE --->
-           <div class="bg-info text-center text-white rounded" style="margin-bottom: 40px;">
-               <!--<span class="closebtn" onclick="this.parentElement.style.display=\'none\';">&times;</span>-->
-               <button type="button" class="close btn-danger" style="margin-right: 10px;" onclick="this.parentElement.style.display='none'"; aria-label="Close">
+           
+
+           <div class="alert alert-info" role="alert" >
+            <button type="button" class="close" onclick="this.parentElement.style.display='none'"; aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
-                <h4>This access codes can be used by the student to create account. </h4>
-           </div>
-           <div class="form-group mb-2">
-              <form class="form-inline">
+              This access codes can be used by the student to create account.
+            </div>
+
+           <div class="form-group mb-2 mt-5">
+              <form class="form-inline" method="POST" action="generate/">
                 <div class="form-group mb-2">
                   <label for="staticEmail2" class="font-weight-bold">Number of Access Codes: </label>
                 </div>
                 <div class="form-group mx-sm-3 mb-2">
                   <label for="inputPassword2" class="sr-only">Password</label>
-                  <input class="form-control" type="number" placeholder="0" id="access-count" name="number" min="0" required>
+                  <!--<input class="form-control" type="number" placeholder="0" id="ccess-count" name="number" min="0" maxlength="" required>-->
+                  <input name="count"
+                    oninput="javascript: setCustomValidity(''); if (this.value > this.maxLength) this.value = this.value = this.maxLength"
+                    type = "number"
+                    maxlength = "50"
+                    min="1" 
+                    required 
+                    class="form-control" 
+                    placeholder="0"
+                    oninvalid="this.setCustomValidity('Please provied number of access codes. Maximum 50.')"
+
+                 />
                 </div>
-                <button type="button" class="btn btn-primary mb-2" id= "instructor-frm-generate"> Generate </button>
+                <button type="Submit" class="btn btn-primary mb-2" id= "instructor-frm-generate"> Generate </button>
               </form>
             </div>
 
@@ -105,7 +124,7 @@
             <div class="container mt-5">
                   <div id="printtable">
         <table style="width:100%"border="1" cellpadding="3" id="tbl-accescodes"  style="font-size: 15px; " >
-          <center><h4> Available Student Codes </h4></center>
+          <h5> Available Student Codes <span class="btn btn-primary float-right mb-2" onclick="printDiv(this)">Print</span> </h5> 
           <tr class="access-tr-head">
             <th id="access-th">Count</th>
             <th id="access-th">Access Codes</th>
@@ -135,12 +154,6 @@
       </div>
       <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
 
-                <div class="row">
-                    <div class="col-sm-6">
-                     <button type="button" id= "instructor-btn-print" class="btn btn-primary"
-      style= "font-size: 12pt; font-weight: bold; padding: 1% 2% 1% 2%; border-radius: 10%;" onclick="printDiv()"> PRINT </button>
-                </div>
-                </div>
             </div>
             
 
@@ -150,7 +163,7 @@
 
 
     <!-- Popper.JS -->
-    <script type="<?php echo(PROJECT_ROOT . "js/accesscode.js")?>"></script>
+    <!--<script src="<?php echo PROJECT_ROOT . "js/accesscodes.js" ?>"></script>-->
     <script src="<?php echo(PROJECT_ROOT . "js/popper.min.js")?>"></script>
     <!-- Bootstrap JS -->
     <script src="<?php echo(PROJECT_ROOT . "js/bootstrap.min-4.1.0.js") ?>"></script>
@@ -162,5 +175,15 @@
                 $('#sidebar').toggleClass('active');
             });
         });
+
+        function printDiv(btn) {
+          $(btn).hide();
+         window.frames["print_frame"].document.body.innerHTML = "<br><b>" + 
+          document.getElementById("printtable").innerHTML;
+         //alert(window.frames["print_frame"].document.body.innerHTML = document.getElementById("printtable").innerHTML);
+         window.frames["print_frame"].window.focus();
+         window.frames["print_frame"].window.print();
+         $(btn).show();
+        }
     </script>
 </html>
