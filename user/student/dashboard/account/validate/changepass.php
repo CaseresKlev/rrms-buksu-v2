@@ -11,7 +11,7 @@
   		$con = $dbconfig->getCon();
 		//echo "Hellow";
 		if(isset($_POST)){
-			print_r($_POST);
+			//print_r($_POST);
 			$query = "SELECT COUNT(`id`) as count FROM `account` WHERE id = ? and `password` COLLATE latin1_general_cs like ?";
 			$stmt = $con->prepare($query);
 			$stmt->bind_param('is', $_SESSION['uid'], $_POST['curpass']);

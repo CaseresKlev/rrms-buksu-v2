@@ -32,23 +32,19 @@
 
 */
 
-    $filter = "all";
     $year = date('Y');
-    if(isset($_GET['filter']) && !empty($_GET['filter'])){
-        $filter = $_GET['filter'];
-       
-    }else{
-        //header("Location: ../404.php");
+    //echo $year;
+    if(isset($_GET['year']) && !empty($_GET['year'])){
+        //$book_id = $_GET['book_id'];
+       $year = $_GET['year'];
     }
-
-
     
     ?>
 </head>
 <body>
-    <div class="container content">
+    <div class="container content mb-3">
         <div class="row">
-            <div class="col-md-8 col-sm-12 mb-5">
+            <div class="col-md-8 col-sm-12">
                 <h4>Year Tag:</h4>
                 <div class="row alert alert-info" role="alert">
                     <?php
@@ -65,7 +61,64 @@
                     ?>
                 </div>
                 <?php
-                  $page = 1;
+                /*
+                        $book_id;
+                        $dbconfig= new dbconfig();
+                        $con= $dbconfig -> getCon();
+                            //$filter = $_GET['filter'];
+                                $query= "SELECT book.book_id, book.book_title, book.cover, book.docloc, SUBSTRING(book.pub_date, 1, 4) as date, book.abstract FROM groupdoc INNER JOIN book on groupdoc.book_id = book.book_id INNER JOIN account ON account.id = groupdoc.accid WHERE book.enabled=1 and account.type = 'STUDENT' ORDER BY book.pub_date ASC limit 20";
+                                $result = $con -> query($query);
+                                if ($result->num_rows>0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        $book_id = $row['book_id'];
+
+                                        echo '<div class="row entry">
+                            <div class="col-md-2" id="cover-div">
+                                <a href=research/?book_id='. $row['book_id'] .'>
+                                    <img src="'. $rootPath  . $row['cover'] .'" id="cover-img">
+                                </a>
+                            </div>
+                            <div class="col-md-10" id="details">
+                                <div class="row">
+                                    <a href="research/?book_id='. $row['book_id'] .'">
+                                        <h5 class="tittle">'. $row['book_title'] .'</h5>
+                                    </a>
+                                </div>
+                                <div class="row">
+                                    By: &nbsp';
+
+                                    $query= 'SELECT author.`a_id`, CONCAT(author.`a_fname`, " ", SUBSTRING(author.`a_mname`, 1, 1), ". " , author.`a_lname`, " ", author.`a_suffix`) AS name FROM junc_authorbook INNER JOIN author on author.a_id = junc_authorbook.aut_id WHERE junc_authorbook.book_id = ' . $book_id;
+                                                        $resultAut = $con -> query($query);
+                                                        while ($author = $resultAut->fetch_assoc()) {
+                                                            echo '<a href="author/?aut_id='. $author['a_id'] .'" class="author">' . $author['name']. '</a>, &nbsp';
+                                                        }
+                                        echo '&nbsp; -' .  $row['date'] . '</div>
+                                <div class="row">
+                                    <div class="text abstract">
+                                    ' . $row['abstract'] . 
+                                    '</div>
+                                </div>
+                                <div class="row keywords">
+                                Key words: &nbsp; <i style="color:#3366ff">';
+
+                                        $query= 'SELECT keywords.key_words FROM `junc_bookkeywords` INNER JOIN keywords on keywords.id = junc_bookkeywords.keywords_id WHERE junc_bookkeywords.book_id = ' . $book_id;
+                                                        $resulKw = $con -> query($query);
+                                                        if($resulKw->num_rows>0){
+                                                            while($kw = $resulKw->fetch_assoc()){
+                                                                echo $kw['key_words'] . ", "; 
+                                                            }
+                                                        }
+                                        echo '</i>
+                                                </div>
+                                            </div>
+                                        </div>';
+                                    }
+                                }
+                    */
+                    ?>
+
+                <?php
+                    $page = 1;
                   $numPerPage = 10;
                   $maxPaginationButton = 10;
                   $curBlock = 1;
@@ -75,16 +128,10 @@
                     $page = 1;
                   }
                   
-                if($filter!=="all"){
-                    $query = "SELECT * FROM `book` WHERE `aut_type` = ? and trim(coalesce(link, '')) <>''";
-                }else{
-                    $query = "SELECT * FROM `book` WHERE 1 and trim(coalesce(link, '')) <>''";
-                }
-
-                $stmt = $con->prepare($query);
-                    if($filter!=="all"){
-                      $stmt->bind_param("s", $filter);
-                }
+                  
+                  $query = "SELECT * FROM `book` WHERE YEAR(`pub_date`) = ? and trim(coalesce(link, '')) <>''";
+                  $stmt = $con->prepare($query);
+                  $stmt->bind_param("s", $year);
                   //include 'ClassPagination.php';
                   //$classPagination = new PaginationClass();
                   //$classPagination->runQuery($query);
@@ -110,31 +157,16 @@
                     //echo(" max: $max");
                   }
 
-
-                    if($filter!=="all"){
-                    $query = "SELECT * FROM `book` WHERE `aut_type` = ? and trim(coalesce(link, '')) <>''";
-                    }else{
-                        $query = "SELECT * FROM `book` WHERE 1 and trim(coalesce(link, '')) <>''";
-                    }
-
-                    $stmt = $con->prepare($query);
-                    if($filter!=="all"){
-                        $stmt->bind_param("s", $filter);
-                    }
-                    $stmt->execute();
-                    $res = $stmt->get_result();
-                    if($res->num_rows>0){
-                        while ($row=$res->fetch_assoc()) {
-                            echo '<div class="row entry ">
-                    <div class="col-md-2" id="cover-div">
-                        <a href=research/?book_id=2>
-                            <img src="' . PROJECT_ROOT . $row['cover'];
-                            echo'" id="cover-img">
-                        </a>
-                    </div>
+                        $stmt = $con->prepare("SELECT * FROM `book` WHERE YEAR(`pub_date`) = ? and trim(coalesce(link, '')) <>'' limit " . $numPerPage . " OFFSET " . $offset);
+                        $stmt->bind_param("s", $year);
+                        $stmt->execute();
+                        $res = $stmt->get_result();
+                        if($res->num_rows>0){
+                            while($row=$res->fetch_assoc()){
+                                echo '<div class="row entry">
                     <div class="col-md-10" id="details">
                         <div class="row">
-                            <a href="research/?book_id=2">
+                            <a href="'. PROJECT_ROOT .'research/'. $year .'/'. $row['aut_type'] .'/'. $row['link'] .'">
                                 <h5 class="tittle">'. $row['book_title'] .'</h5>
                             </a>
                         </div>
@@ -147,7 +179,11 @@
                                     echo ucwords('<a href="'. PROJECT_ROOT .'author/?aut_id='. $auth['a_id'] .'" class="author">'. $auth['name'] .'</a>,&nbsp;');
                                 }
                             }
-                        echo '</div>
+                            echo'
+                        </div>
+                        <div class="row mb-3">
+                            Type: '. ucwords($row['aut_type']) .' Research
+                        </div>
                         <div class="row">
                             <div class="text abstract">
                                 '. $row['abstract'] .'
@@ -158,16 +194,14 @@
                         </div>
                     </div>
                 </div>';
+                            }
+                        }else{
+                            echo '<div class="row alert alert-warning" role="alert">No matching record to your selected Year.</div>';
                         }
-                    }
 
-                ?>
+                    ?>
+
                 <!--<div class="row entry">
-                    <div class="col-md-2" id="cover-div">
-                        <a href=research/?book_id=2>
-                            <img src="research/cover/5b98b3aed8a385.66287600.jpg" id="cover-img">
-                        </a>
-                    </div>
                     <div class="col-md-10" id="details">
                         <div class="row">
                             <a href="research/?book_id=2">
@@ -177,6 +211,9 @@
                         <div class="row">
                             By: &nbsp<a href="author/?aut_id=2" class="author">Klevie Jun R. Caseres </a>, &nbsp<a href="author/?aut_id=3" class="author">Anne P. Cruz </a>, &nbsp
                                                 &nbsp; - 2018
+                        </div>
+                        <div class="row mb-3">
+                            Type: Instructor Research
                         </div>
                         <div class="row">
                             <div class="text abstract">
@@ -188,13 +225,19 @@
                         </div>
                     </div>
                 </div>-->
-                    
-                    
+                <div class="row my-5">
+                    <?php
+                    if($count>0)
+                        include PROJECT_ROOT_NOT_LINK. 'includes/pagination.php';
+
+                    ?>
+                </div>
+                
             </div>
             <!--widget area -->
             <!--related study-->
                 <div class="col-md-4" id="related-study">
-                    <?php include(PROJECT_ROOT_NOT_LINK . "recent-post.php") ?>
+                      <?php include(PROJECT_ROOT_NOT_LINK . "recent-post.php") ?>
                     <?php include(PROJECT_ROOT_NOT_LINK . "archive.php") ?>
                 </div>
         </div>

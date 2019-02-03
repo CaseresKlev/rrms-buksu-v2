@@ -50,6 +50,9 @@
                 <li>
                     <a href="book_reports.php?title=&dept=&status=&author=&from=0&to=2018" target="_blank">Reports</a>
                 </li>
+                <li <?php if($cur==="post"){echo 'class="active"';} ?>>
+                    <a href="post.php">Post</a>
+                </li>
             </ul>
 
         </nav>

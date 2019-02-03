@@ -66,6 +66,20 @@
                         </li>
                     </ul>-->
                 </li>
+                <li <?php if($currentDIR==="documents") echo 'class="active"';?>>
+                    <a href="<?php echo(PROJECT_ROOT . "user/instructor/dashboard/documents/") ?>" >My Documents</a>
+                    <!--<ul class="collapse list-unstyled" id="pageSubmenu">
+                        <li>
+                            <a href="#">Page 1</a>
+                        </li>
+                        <li>
+                            <a href="#">Page 2</a>
+                        </li>
+                        <li>
+                            <a href="#">Page 3</a>
+                        </li>
+                    </ul>-->
+                </li>
                 <!--<li>
                     <a href="book_reports.php?title=&dept=&status=&author=&from=0&to=2018" target="_blank">Reports</a>
                 </li>

@@ -83,7 +83,7 @@
 		 			<?php
 		              		$dbconfig= new dbconfig();
 							$con= $dbconfig -> getCon();
-							$query = "SELECT `id`, `post_tittle`, `post_body`, `post_date`, `post_user`, `location` FROM `post` ORDER BY `post_date` DESC LIMIT 5";
+							$query = "SELECT `id`, `post_tittle`, `post_body`, `post_date`, `post_user`, `location`, `views_count` FROM `post` ORDER BY `post_date` DESC LIMIT 5";
 							$result = $con->query($query);
 							if($result->num_rows>0){
 								while ($row = $result->fetch_assoc()) {
@@ -96,7 +96,7 @@
 		 					$date = $row['post_date'];
 		 					$sdate=date_create($date);
 							echo date_format($sdate,'F d, Y \a\t h:i A');
-		 					echo '</p>
+		 					echo '&nbsp;<span class="badge badge-dark text-white"><i class="fas fa-eye"></i> &nbsp;'. $row['views_count'] .'</span></p>
 		 				</div>
 		 				
 		 				
@@ -325,47 +325,8 @@
 
 		 		<!--related study-->
 		 		<div class="col-md-4" id="related-study">
-		              <div class="list-group" >
-		              	<div class="list-group-item bg-dark" id="widget-header">
-		              		Recent Post
-		              	</div>
-		              	
-		              	<?php
-		              		$dbconfig= new dbconfig();
-							$con= $dbconfig -> getCon();
-							$query = "SELECT `id`, `post_tittle`, `location` FROM `post` ORDER BY `post_date` DESC LIMIT 5";
-							$result = $con->query($query);
-							if($result->num_rows>0){
-								while ($row = $result->fetch_assoc()) {
-									echo '<a href="'. PROJECT_ROOT . $row['location'] . '?post_id=' . $row['id'] . '" class="list-group-item">'. $row['post_tittle'] .'</a>';
-								}
-							}
-		              	?>
-		              </div>
-
-		               <div class="list-group" >
-		              	<div class="list-group-item bg-dark" id="widget-header">
-		              		Archive
-		              	</div>
-
-		              	<?php
-		              		$dbconfig= new dbconfig();
-							$con= $dbconfig -> getCon();
-		              		$query = "SELECT DISTINCT year(pub_date) as archive FROM `book` ORDER BY(year(pub_date)) DESC LIMIT 10";
-		              		$result = $con->query($query);
-
-		              		if($result->num_rows>0){
-		              			while($row = $result->fetch_assoc()){
-		              				echo '<a href="#" class="list-group-item">'. $row['archive'] .'</a>';
-		              			}
-		              			if($result->num_rows>1){
-		              				echo '<a href="'. $rootPath .'research/all-year/" class="list-group-item">>> View all Year</a>';
-		              			}
-		              		}else{
-		              			echo '<a href="#" class="list-group-item">No archive found</a>';
-		              		}
-		              	?>
-		              </div>
+		             <?php include(PROJECT_ROOT_NOT_LINK . "recent-post.php") ?>
+          			<?php include(PROJECT_ROOT_NOT_LINK . "archive.php") ?>
 		 		</div>
 		 	</div>
 		 </div>
@@ -447,6 +408,18 @@
     		}
 
     	?>
+
+    	$('.post-post').each(function(){
+
+		 if($(this).find('img').length > 0)
+		 {
+		  var img = $(this).find('img');
+		  //$(this).css('background-color','yellow');
+		    //$(this).css('background-image','url(' + imgSrc + ')');
+		    //$(this).hide();
+		  $(img).hide();
+		 }
+		});
     	
     </script>
 </body>

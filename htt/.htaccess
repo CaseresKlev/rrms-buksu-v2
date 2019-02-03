@@ -1,7 +1,0 @@
-# Hide the contents of directories
-IndexIgnore *
-
-# Deny access to files with extensions .ini, .psd, .log, .sh
-<FilesMatch "\.(txt|psd|log|sh)$">
-Order allow, deny
-Deny from all

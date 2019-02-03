@@ -245,3 +245,13 @@ td{
 		font-size: 1.5em;
 	}
 }
+
+@media only screen and (max-width: 500px) {
+	.content{
+		padding-top: 30px !important;
+		padding-left: 10px !important;
+		padding-right: 10px !important;
+	}
+
+
+}
