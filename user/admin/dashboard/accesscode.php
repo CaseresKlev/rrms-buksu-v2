@@ -1,7 +1,8 @@
 <?php
+    $currentDIR = "";
     $cur = "accesscode";
   session_start();
-
+  $loaded = false;
 
   if(isset($_SESSION['uid'])){
     //print_r($_SESSION);

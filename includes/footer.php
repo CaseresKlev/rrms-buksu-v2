@@ -46,3 +46,9 @@
 <script src="<?php echo("http://$_SERVER[HTTP_HOST]" . "/rrms-buksu/js/bootstrap.min-4.1.0.js"); ?>"></script>
 <!--favicon-->
 <script type="text/javascript" src="<?php echo("http://$_SERVER[HTTP_HOST]" . "/rrms-buksu/js/fontawesome.js"); ?>"></script>
+
+<script type="text/javascript">
+  function search(){
+        alert("l");
+  }
+</script>

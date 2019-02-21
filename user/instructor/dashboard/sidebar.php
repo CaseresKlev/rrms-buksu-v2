@@ -9,7 +9,7 @@
                   <h6> <?php echo strtoupper($acctype) ?></h6>
                 </span>
             </div>
-            <ul class="list-unstyled components" style="margin-left: 10%">
+            <ul class="list-unstyled" style="margin-left: 10%">
                 <li id="link-myProfile" <?php if($currentDIR==="profile") echo 'class="active"';?> >
                     <a href="<?php echo(PROJECT_ROOT . "user/instructor/dashboard/profile/") ?>">My Profile
                       <!--<i class="fas fa-circle fa-xs" style="color:red"></i>-->

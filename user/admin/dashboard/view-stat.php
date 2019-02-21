@@ -1,6 +1,7 @@
 <?php
+$currentDIR = "";
 $cur = "research";
-
+$loaded = false;
   session_start();
   $book_id ="";
   $book_title = "";
@@ -31,7 +32,10 @@ $cur = "research";
   if($result->num_rows>0){
     $row = $result->fetch_assoc();
     $book_title = $row['book_title'];
+    $book_id = $row['book_id'];
   }
+
+
 
 
   ?>
@@ -73,7 +77,7 @@ $cur = "research";
                  <?php
                   $dbconfig = new dbconfig();
                   $con = $dbconfig->getCon();
-                  $query = "SELECT author.a_id, CONCAT(author.a_lname, ', ' , SUBSTRING(author.a_fname, 1, 1), ';') as 'author' FROM author INNER JOIN junc_authorbook on junc_authorbook.aut_id = author.a_id WHERE junc_authorbook.book_id=" . $row['book_id'];
+                  $query = "SELECT author.a_id, CONCAT(author.a_lname, ', ' , SUBSTRING(author.a_fname, 1, 1), ';') as 'author' FROM author INNER JOIN junc_authorbook on junc_authorbook.aut_id = author.a_id WHERE junc_authorbook.book_id=" . $book_id;
                   $result = $con->query($query);
                   if($result->num_rows>0){
                       $row = $result->fetch_assoc();
@@ -136,7 +140,9 @@ $cur = "research";
                                   include_once 'connection.php';
                                   $dbconfig = new dbconfig();
                                   $con = $dbconfig->getCon();
-                                  $query3 = "SELECT paper_trail.id, paper_trail.isdone FROM paper_trail WHERE paper_trail.p_sat_id = " . $row['count'] . " and paper_trail.book_id = $book_id";
+                                  //$query3 = "SELECT paper_trail.id, paper_trail.isdone FROM paper_trail WHERE paper_trail.p_sat_id = " . $row['count'] . " and paper_trail.book_id = $book_id";
+
+                                  $query3 = "SELECT paper_trail.id, paper_trail.isdone, (SELECT CASE WHEN EXISTS (SELECT pn.bookid from push_notification pn where pn.bookid = paper_trail.book_id and paper_trail.p_sat_id =  pn.trail and pn.seen = 0) THEN 'UPDATED' else '' END) as updated FROM paper_trail WHERE paper_trail.p_sat_id = " . $row['count'] . " and paper_trail.book_id = " . $book_id;
                                   //echo $query3;
                                   //echo $query3;
                                   $result3 = $con->query($query3);
@@ -153,7 +159,7 @@ $cur = "research";
 
 
                                 echo '<tr>
-                        <td scope="col" style="width: 75%"><a href="admin-view-full-status.php?trail=' . $row3['id'] . '&book_id='. $book_id .'"><em class="btn btn-primary btn-md" style="width: 100%; text-align: left; style=" >'. $row['step'] .'</em></a></td>
+                        <td scope="col" style="width: 75%"><a href="admin-view-full-status.php?trail=' . $row3['id'] . '&book_id='. $book_id .'"><em class="btn btn-primary btn-md" style="width: 100%; text-align: left; style=" >'. $row['step'] .'<sup class="badge badge-danger ml-3">'. $row3['updated'] .'</sup></em></a></td>
                         <td scope="col" style="width: 20%">
                           <select class="form-control" id="select-'. $row['count'].'">
                             <option>'. $tmp .'</option>

@@ -158,7 +158,7 @@
                       while($rowDis = $result->fetch_assoc()){
                         if($rowDis['requirements']==1){
                            echo '
-                              <tr class="clickable-row" data-href="details/?trail='. $rowDis['id'] . '&book=147">
+                              <tr class="clickable-row" data-href="details/?trail='. $rowDis['id'] . '&book='. $_GET['book'] .'">
                                 <td scope="row">' . $rowDis['p_sat_id'] .'</td>
                                 <td scope="row">' . $rowDis['title'] . '</td>
                                 <td class="badge bg-success float-left text-white mt-1">

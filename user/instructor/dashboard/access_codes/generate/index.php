@@ -41,10 +41,10 @@
 		exit();
 	}
 
-	
+	$limit = 150;
 
-	if($count>(50 - $current)){
-		$count = 50 - $current;
+	if($count>($limit - $current)){
+		$count = $limi - $current;
 	}
 
 
@@ -66,6 +66,8 @@
 		}
 		
 	}
+
+	header("Location: " . PROJECT_ROOT . "user/instructor/dashboard/access_codes/");
 
 	//print_r($accesskey);
 	foreach ($accesskey as $key) {

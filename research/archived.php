@@ -1,12 +1,7 @@
 <?php
      
     $book_id= null;
-    if(isset($_GET['book_id']) && !empty($_GET['book_id'])){
-        $book_id = $_GET['book_id'];
-        //mkdir($rootPath . "2018/");
-    }else{
-        //header("Location: ../404.php");
-    }
+    
     
 
 ?>
@@ -227,8 +222,10 @@
                 </div>-->
                 <div class="row my-5">
                     <?php
-                    if($count>0)
+                    if($count>0){
+                        $head = "?year=". $year ."&page=";
                         include PROJECT_ROOT_NOT_LINK. 'includes/pagination.php';
+                    }
 
                     ?>
                 </div>

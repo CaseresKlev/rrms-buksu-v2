@@ -46,44 +46,46 @@
 </head>
 <body>
     <div class="se-pre-con"></div>
-    <div class="container content mb-5">
-      <div class="row">
-        <div class="col-md-9 col-sm-12">
-          <div class="row">
-            <?php
+    <div class="container content">
+      <div class="container main-body-wrapler">
+        <div class="row">
+          <div class="col-md-9 col-sm-12">
+            <div class="row">
+              <?php
 
-            if($post['feautured']==1 && $post['cover']!==""){
-              echo '<img class="border border-3" src="'. PROJECT_ROOT .  $post['cover'] . '" alt="Featured Cover" width="100%" height="250px">';
-            }
+              if($post['feautured']==1 && $post['cover']!==""){
+                echo '<img class="border border-3" src="'. PROJECT_ROOT .  $post['cover'] . '" alt="Featured Cover" width="100%" height="250px">';
+              }
 
-            ?>
-            
+              ?>
+              
+            </div>
+            <div class="row mt-3 h2 font-weight-bold text-primary">
+              <?php echo $post['post_tittle']; ?>
+            </div>
+            <div class="row">
+              <span>
+                Posted by <i class="fas fa-user"></i>&nbsp;<?php echo $post['post_user'] ?>
+              </span>
+              <span>
+                &nbsp; <i class="fas fa-clock"></i>&nbsp;
+                <?php $date = $post['post_date'];
+                $sdate=date_create($date);
+                echo date_format($sdate,'F d, Y \a\t h:i A'); ?>
+              </span>
+              <span>
+                &nbsp;<i class="fas fa-eye"></i>
+                <?php echo $count; ?>
+              </span>
+            </div>
+            <div class="row mt-5">
+              <?php echo $post['post_body']; ?>
+            </div>
           </div>
-          <div class="row mt-3 h2 font-weight-bold text-primary">
-            <?php echo $post['post_tittle']; ?>
+          <div class="col-md-3" id="related-study">
+            <?php include(PROJECT_ROOT_NOT_LINK . "recent-post.php") ?>
+            <?php include(PROJECT_ROOT_NOT_LINK . "archive.php") ?>
           </div>
-          <div class="row">
-            <span>
-              Posted by <i class="fas fa-user"></i>&nbsp;<?php echo $post['post_user'] ?>
-            </span>
-            <span>
-              &nbsp; <i class="fas fa-clock"></i>&nbsp;
-              <?php $date = $post['post_date'];
-              $sdate=date_create($date);
-              echo date_format($sdate,'F d, Y \a\t h:i A'); ?>
-            </span>
-            <span>
-              &nbsp;<i class="fas fa-eye"></i>
-              <?php echo $count; ?>
-            </span>
-          </div>
-          <div class="row mt-5">
-            <?php echo $post['post_body']; ?>
-          </div>
-        </div>
-        <div class="col-md-3" id="related-study">
-          <?php include(PROJECT_ROOT_NOT_LINK . "recent-post.php") ?>
-          <?php include(PROJECT_ROOT_NOT_LINK . "archive.php") ?>
         </div>
       </div>
     </div>

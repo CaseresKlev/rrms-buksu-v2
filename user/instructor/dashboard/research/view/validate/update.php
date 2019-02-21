@@ -58,6 +58,18 @@
 		
 		if($stmt->execute()){
 			$feed->status="success";
+
+			$stmt2 = $con->prepare("INSERT INTO `push_notification` (`id`, `receiver`, `bookid`, `description`, `sender`, `link`, `date`, `seen`)
+SELECT null, junc_authorbook.aut_id, ?, 'Updated the contents of your research.', ?, ?, CURRENT_TIMESTAMP, '0' from junc_authorbook where junc_authorbook.book_id = ? and junc_authorbook.aut_id != ?");
+				
+				$loclink = PROJECT_ROOT . "user/[xxxxx]/dashboard/research/view/?book=" . $book_id;
+				$stmt2->bind_param("iisii", $book_id, $_SESSION['owner'], $loclink,  $book_id, $_SESSION['owner']);
+				if(!$stmt2->execute()){
+					
+				}
+
+
+
 		}else{
 			$feed->status="error";
 		}

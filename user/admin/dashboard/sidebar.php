@@ -1,8 +1,14 @@
-<?php include($_SERVER["DOCUMENT_ROOT"] . "/rrms-buksu/includes/path.php"); ?>
+<?php
+    if(!$loaded){
+
+        include($_SERVER["DOCUMENT_ROOT"] . "/rrms-buksu/includes/path.php");
+    } 
+
+?>
 
 <nav id="sidebar" style="position: -webkit-sticky; position: sticky; top: 0">
             <div class="sidebar-header">
-                <h4>Research Record Mangement System</h4>
+                <h5>Research Record Mangement System</h5>
             </div>
             <div class="sidebar-header">
                 <i class="fas fa-user-circle fa-3x"></i>
@@ -13,8 +19,8 @@
             </div>
             <ul class="list-unstyled components" style="margin-left: 10%">
                 <li  <?php if($cur==="research"){echo 'class="active"';} ?>>
-                    <a href="admindashboard.php">Research
-                      <i class="fas fa-circle fa-xs" style="color:red"></i>
+                    <a href="<?php echo PROJECT_ROOT . 'user/admin/dashboard/admindashboard.php' ?>">Research
+                      
                     </a>
 
                     <!--<ul class="collapse list-unstyled" id="homeSubmenu">
@@ -31,10 +37,10 @@
                 </li>
                 <li <?php if($cur==="account"){echo 'class="active"';} ?> >
 
-                    <a href="updateAcc.php" >Account</a>
+                    <a href="<?php echo PROJECT_ROOT . 'user/admin/dashboard/updateAcc.php'; ?>" >Account</a>
                 </li>
                 <li <?php if($cur==="accesscode"){echo 'class="active"';} ?>>
-                    <a href="accesscode.php" >Access Codes</a>
+                    <a href="<?php echo PROJECT_ROOT . 'user/admin/dashboard/accesscode.php'; ?>" >Access Codes</a>
                     <!--<ul class="collapse list-unstyled" id="pageSubmenu">
                         <li>
                             <a href="#">Page 1</a>
@@ -47,12 +53,29 @@
                         </li>
                     </ul>-->
                 </li>
-                <li>
-                    <a href="book_reports.php?title=&dept=&status=&author=&from=0&to=2018" target="_blank">Reports</a>
-                </li>
                 <li <?php if($cur==="post"){echo 'class="active"';} ?>>
-                    <a href="post.php">Post</a>
+                    <a href="<?php echo PROJECT_ROOT . 'user/admin/dashboard/post.php'; ?>">Post</a>
+                </li>
+                <li>
+                    <a href="<?php echo PROJECT_ROOT . 'user/admin/dashboard/book_reports.php?title=&dept=&status=&author=&from=0&to=2018';?>" target="_blank">Reports</a>
+                </li>
+                
+            </ul>
+            <ul class="list-unstyled " style="margin-left: 10%">
+                <li <?php if($cur==="add-completed"){echo 'class="active"';} ?>>
+                    <a href="<?php echo PROJECT_ROOT . 'user/admin/dashboard/paper/add-completed/';?>" >Add Completed Paper</a>
+                </li>
+                <li <?php if($cur==="dissemination"){echo 'class="active"';} ?>>
+                    <a href="<?php echo PROJECT_ROOT . 'user/admin/dashboard/paper/dissemination/';?>" >Dissemination</a>
+                </li>
+                <li <?php if($cur==="publication"){echo 'class="active"';} ?>>
+                    <a href="<?php echo PROJECT_ROOT . 'user/admin/dashboard/paper/publication/';?>" >Publication</a>
+                </li>
+                <li <?php if($cur==="utilization"){echo 'class="active"';} ?>>
+                    <a href="<?php echo PROJECT_ROOT . 'user/admin/dashboard/paper/utilization/';?>" >Utilization</a>
+                </li>
+                <li>
+                    <a href="<?php echo PROJECT_ROOT . 'user/admin/dashboard/paper/rewards/';?>" >Rewards</a>
                 </li>
             </ul>
-
         </nav>

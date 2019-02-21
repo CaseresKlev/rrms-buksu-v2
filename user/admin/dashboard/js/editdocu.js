@@ -90,7 +90,7 @@ $("button[id='btn-dis-edit[]").click(function(){
 	var date = $("#dis-date-td-" + str[1]).html();
 
 	updateDis = str[0];
-	//alert(updateDis);
+	alert(updateDis);
 	//alert(type);
 	$("#dis-type").val(type);
 	$("#dis-con").val(conven);

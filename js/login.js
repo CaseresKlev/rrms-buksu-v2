@@ -32,6 +32,7 @@ $("#submit").click(function() {
           $(".error-msg").html(str[1]);
           //$(".error-msg").html(data);
           $(".error-msg").show();
+          $("#login").effect("shake");
         }
 
       }

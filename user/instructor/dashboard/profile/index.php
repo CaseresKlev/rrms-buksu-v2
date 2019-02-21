@@ -53,6 +53,19 @@
           background: url(<?php echo PROJECT_ROOT . 'img/loader-64x/Preloader_3.gif'?> ) center no-repeat #fff;
         }
         </style>
+        <style>
+        .no-js #loader { display: none;  }
+        .js #loader { display: block; position: absolute; left: 100px; top: 0; }
+        .se-pre-con2 {
+          position: fixed;
+          left: 0px;
+          top: 0px;
+          width: 100%;
+          height: 100%;
+          z-index: 9999;;
+          background: url(<?php echo PROJECT_ROOT . 'img/loader-64x/Preloader_3.gif'?> ) center no-repeat #fff;
+        }
+        </style>
 </head>
 <script type="text/javascript">
           $(window).on('load', function () {
@@ -262,7 +275,7 @@
            <!---- AYAW NAG LAPAS DIRI --->
         </div>
     </div>
-
+    <?php //include PROJECT_ROOT_NOT_LINK . "user/instructor/dashboard/chatbox.php"; ?>
 
     <!-- Popper.JS -->
     <script src="<?php echo(PROJECT_ROOT . "js/popper.min.js")?>"></script>

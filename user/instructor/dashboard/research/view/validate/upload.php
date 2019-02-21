@@ -131,7 +131,9 @@
 		                    if(move_uploaded_file($tempfile, $finalLocation . $newfile)){
 		                      $final = $dbloc . $newfile;
 
+		                      $descAction = "Updated the Cover Picture of your research.";
 		                      if($action==="file"){
+		                      	$descAction = "Updated the Final Paper of your research.";
 		                      	 $stmt = $con->prepare("UPDATE `book` SET `docloc` = ? WHERE `book`.`book_id` = ?");
 		                      	}else if($action==="cover"){
 		                      		$stmt = $con->prepare("UPDATE `book` SET `cover` = ? WHERE `book`.`book_id` = ?");
@@ -143,6 +145,16 @@
 		                       	$remove = $finalLocation . $oldFile;
 		                       	if(!unlink($remove)){}
 		                       	//echo $finalLocation . $oldFile;
+
+		                       		$stmt2 = $con->prepare("INSERT INTO `push_notification` (`id`, `receiver`, `bookid`, `description`, `sender`, `link`, `date`, `seen`)
+SELECT null, junc_authorbook.aut_id, ?, ?, ?, ?, CURRENT_TIMESTAMP, '0' from junc_authorbook where junc_authorbook.book_id = ? and junc_authorbook.aut_id != ?");
+				
+				$loclink = PROJECT_ROOT . "user/[xxxxx]/dashboard/research/view/?book=" . $book_id;
+				$stmt2->bind_param("isisii", $book_id, $descAction, $_SESSION['owner'], $loclink,  $book_id, $_SESSION['owner']);
+				if(!$stmt2->execute()){
+					
+				}
+
 		                       		header("Location: ../?book=" . $book_id . "&msg=Success! you Updated your Research.&alertType=success");
 		                       }
 

@@ -68,6 +68,16 @@
 				$old = PROJECT_ROOT_NOT_LINK . "research/" . $year . "/" . $type . "/" . $webLink;
 				$new = PROJECT_ROOT_NOT_LINK . "research/" . $year . "/" . $type . "/" . $loc;
 				//echo $dir;
+
+				$errorCurrent = false;
+				$stmt2 = $con->prepare("INSERT INTO `push_notification` (`id`, `receiver`, `bookid`, `description`, `sender`, `link`, `date`, `seen`)
+SELECT null, junc_authorbook.aut_id, ?, 'Updated the title of your research.', ?, ?, CURRENT_TIMESTAMP, '0' from junc_authorbook where junc_authorbook.book_id = ? and junc_authorbook.aut_id != ?");
+				
+				$loclink = PROJECT_ROOT . "user/[xxxxx]/dashboard/research/view/?book=" . $id;
+				$stmt2->bind_param("iisii", $id, $_SESSION['owner'], $loclink,  $id, $_SESSION['owner']);
+				if(!$stmt2->execute()){
+					$errorCurrent = true;
+				}
 				if(file_exists($old)){
 					//echo "Exist";
 					if(rename($old, $new)){
@@ -78,7 +88,12 @@
 						//header("Location: ../?book=$id&msg=Transaction failed!<br> Your Research was NOT Updated! Error while renaming.&alertType=danger");
 					}
 				}else{
-					header("Location: ../?book=$id&msg=Transaction failed!<br> Your Research was NOT Updated!&alertType=danger");
+					if(!$errorCurrent){
+						header("Location: ../?book=$id&msg=Transaction failed!<br> Your Research was NOT Updated!&alertType=danger");
+					}else{
+						echo "<h1>error on Current modification.";
+					}
+					
 				}
 				
 			}

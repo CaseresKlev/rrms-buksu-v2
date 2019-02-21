@@ -24,7 +24,7 @@
         if($result->num_rows<1){
           //header("Location: " . PROJECT_ROOT . "404.php");
         }else{
-          echo "Error here";
+          //echo "Error here";
         }
       }
 

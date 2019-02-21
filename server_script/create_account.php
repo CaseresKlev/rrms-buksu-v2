@@ -1,7 +1,7 @@
 <?php
 
 	if(isset($_POST)){
-		print_r($_POST);
+		//print_r($_POST);
 		include($_SERVER["DOCUMENT_ROOT"] . "/rrms-buksu/includes/path.php");
   		include (PROJECT_ROOT_NOT_LINK . "includes/connection.php");
 		$query = "SELECT * FROM `acesskey` WHERE `acesskey` COLLATE latin1_general_cs LIKE ? and `used` = 0";
@@ -13,7 +13,7 @@
   		$stmt->bind_param("s", $_POST['access_code']);
   		if(!$stmt->execute()){
   			header("Location: ../create-account.php?msg=We apologize, but something went wrong to your request.<br>We will fix it soon!&alertType=danger");
-  			print_r($stmt);
+  			//print_r($stmt);
   			exit();
   		}
 
@@ -51,16 +51,62 @@
   		$lastInserID = $stmt->insert_id;
   		$stmt = $con->prepare("INSERT INTO `author` (`a_id`, `a_fname`, `a_mname`, `a_lname`, `a_suffix`, `bib`, `a_add`, `a_contact`, `a_email`, `a_pic`, `login`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, '', ?)");
   		$stmt->bind_param("ssssssssi", $fname, $mname, $lname, $suf, $_POST['biography'], $address, $contact, $_POST['email'], $lastInserID);
+
+      
+      
   		if(!$stmt->execute()){
   			print_r($stmt);
   			$con->query("DELETE FROM `account` WHERE `account`.`id` = " . $lastInserID);
   		}
 
-  		
-  		
+  		$accountID = $stmt->insert_id;
+  		//echo "<h1>CountID: $accountID";
   		$result = $con->query("DELETE FROM `acesskey` WHERE `acesskey`.`id` = " . $accessID);
 
 
+      if($usrType==="INSTRUCTOR"){
+
+        $stmt = $con->prepare('SELECT a_id FROM `author` WHERE `a_fname` = "Administrator" and `a_mname` = "Administrator" and `a_lname` = "Administrator"');
+        if($stmt->execute()){
+          $res = $stmt->get_result();
+          if($res->num_rows>0){
+            $admin = $res->fetch_assoc();
+            $adminID = $admin['a_id'];
+
+            $stmt2 = $con->prepare('INSERT INTO `chat` (`id`, `author1`, `author2`) VALUES (NULL, ?, ?)');
+            $stmt2->bind_param("ii", $accountID, $adminID);
+            if($stmt2->execute()){
+              $chatID = $stmt2->insert_id;
+              //echo "<h1>ChatID: $chatID";
+              $message = "Welcome " . $fname . " " . $lname . "!<br><br>If you have COMPLETED / DISSEMINATED or PUBLISHED Paper. Please notify us in order to add your research.<br><br>Thank you!<br><br>Note: Do not add your completed / disseminated or published paper by your self. Those paper should be validated by us. This is auto genarated message. Reply not needed.";
+
+              $stmt3 = $con->prepare("INSERT INTO `messages` (`id`, `chat_id`, `receiver`, `sender`, `msg`, `date`, `seen`) VALUES (NULL, ?, ?, ?, ?, CURRENT_TIMESTAMP, '0')");
+              $stmt3->bind_param('iiis', $chatID, $accountID, $adminID, $message);
+              $stmt3->execute();
+
+              $stmt4 = $con->prepare("INSERT INTO `notification` (`id`, `isShow`, `author_id`) VALUES (NULL, '1', ?)");
+              $stmt4->bind_param('i', $accountID);
+              if(!$stmt4->execute()){
+
+              }
+            }else{
+              //echo "error on stm2";
+            }
+            //$res2 = $stmt2->get_result();
+
+            
+          }else{
+            //echo "no addmin account";
+          }
+        }else{
+          //echo 'Error on Stm1';
+        }
+
+
+
+      }else{
+        //echo "Not Instructor: " . $usrType;
+      }
   		header("Location: ../?msg=Welcome&to=" . $fname . " " . $lname);
 
 

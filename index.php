@@ -5,6 +5,9 @@
     <?php
     	include 'includes/header.php';
     	include 'includes/connection.php';
+
+    	$dbconfig= new dbconfig();
+		$con= $dbconfig -> getCon();
     ?>
 
     
@@ -30,77 +33,51 @@
 		}
 	</style>-->
 	<div class="container content">
-		<div id="bs4-slide-carousel" class="carousel slide" data-ride="carousel">
-			<ol class="carousel-indicators">
-		    	<li data-target="#bs4-slide-carousel" data-slide-to="0" class="active"></li>
-		    	<li data-target="#bs4-slide-carousel" data-slide-to="1"></li>
-		  </ol>
-		  <div class="carousel-inner" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.6); ">
-
-		  	<!--FIRST ITEM -->
-		  	<div class="carousel-item active">
-		  		 <img class="d-inline w-100" src="post/pics/web-development.jpg" alt="Slide One" id="cousel-img">
-		  		 <div class="carousel-caption" id="carousel-caption">
-		  		 	<h5>The demo of using text in carousel Bootstrap</h5>
-		  		 	<div class="text carousel-text">
-		  		 		Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here Another caption line goes here 
-		  		 	</div>
-		  		 	<a href=""><b>View Here</b></a>
-		  		 </div>
-		  	</div>
-
-		  	<!--SECOND ITEM -->
-		  	<div class="carousel-item">
- 				<img class="d-inline w-100" src="post/pics/Disney-Princess.jpg" alt="Slide Two" id="cousel-img">
- 
-      			<!--Captions for the slides go here -->
-      			<div class="carousel-caption" id="carousel-caption">
- 					<h5>The demo of using text in carousel Bootstrap</h5>
-        			<div class="text carousel-text">
-		  		 		Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. 
-		  		 	</div>
-		  		 	<a href=""><b>View Here</b></a>
-        		</div>
- 
-      <!--Captions ending here for slide 2-->       
-       		</div>
+		<!--Start of CARROUSEL -->
+		<?php 
 
 
-		  </div>
-		  <a class="carousel-control-prev" href="#bs4-slide-carousel" role="button" data-slide="prev">
-		    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-		    <span class="sr-only">Previous</span>
-		  </a>
-		  <a class="carousel-control-next" href="#bs4-slide-carousel" role="button" data-slide="next">
-		    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-		    <span class="sr-only">Next</span>
-		  </a> 
-		</div>
+			$stmt = $con->prepare("SELECT * FROM `post` WHERE `feautured` = 1 order by `post_date` DESC limit 7");
+			if($stmt->execute()){
+				$res = $stmt->get_result();
+				if($res->num_rows>0){
+					include 'carrousel.php';
+				}
+			}
 
+
+			
+		?>
+
+		<!--END OF CAROUSEL-->
+		<div class="container content">
 		<div class="container main-body-wrapler">
 		 	<div class="row">
 		 		<div class="col-md-8 col-sm-12">
 		 			<?php
-		              		$dbconfig= new dbconfig();
-							$con= $dbconfig -> getCon();
+		              		
 							$query = "SELECT `id`, `post_tittle`, `post_body`, `post_date`, `post_user`, `location`, `views_count` FROM `post` ORDER BY `post_date` DESC LIMIT 5";
 							$result = $con->query($query);
 							if($result->num_rows>0){
 								while ($row = $result->fetch_assoc()) {
 									echo '<div class="row post-post">
-		 				<div class="col-md-12 post-tittle-wrapler">
-		 					<a href="'. PROJECT_ROOT .  $row['location'] . '?post_id='. $row['id'] .'"><h4 id="post-tittle">'. $row['post_tittle'] .'</h4></a>
+		 				<div class="col-md-12">
+		 					<div class="row">
+		 					<a href="'. PROJECT_ROOT .  $row['location'] . '?post_id='. $row['id'] .'"><h5 id="post-tittle">'. $row['post_tittle'] .'</h5></a>
+		 					</div>
 		 				</div>
-		 				<div class="col-md-12 post-date-wrapler">
-		 					<p id="post-date">Posted by <i class="fas fa-user"></i> '. $row['post_user'] .' <i class="fas fa-clock"></i> '; 
+		 				<div class="col-md-12">
+		 					<div class="row">
+		 					<p id="post-date" style="font-size: 10pt;">Posted by <i class="fas fa-user"></i> '. $row['post_user'] .' <i class="fas fa-clock"></i> '; 
 		 					$date = $row['post_date'];
 		 					$sdate=date_create($date);
 							echo date_format($sdate,'F d, Y \a\t h:i A');
 		 					echo '&nbsp;<span class="badge badge-dark text-white"><i class="fas fa-eye"></i> &nbsp;'. $row['views_count'] .'</span></p>
+		 					</div>
 		 				</div>
 		 				
 		 				
-		 				<div class="text" id="post-details">'. $row['post_body'] .'</div>
+		 				<div class="text" id="post-details">'. strip_tags($row['post_body']) .'</div>
 		 			</div>';
 								}
 							}
@@ -170,10 +147,15 @@
 								  	'</div>
 								</div>
 								<div class="row keywords">
-								Key words: &nbsp; <i style="color:#3366ff">'
+                                    Key words: &nbsp;<i style="color:#3366ff">'; 
 
-										. $row['keywords'] .'</i>
-												</div>
+                                    $kw = explode(",", $row['keywords']);
+                                    //print_r($kw);
+                                    foreach ($kw as $key) {
+                                    	echo '<a href="' . PROJECT_ROOT . "search/?k=" . $key . '">'. $key .',</a>';
+                                    }
+                                    echo '</i>
+                            </div>
 											</div>
 										</div>';
 									}
@@ -330,6 +312,7 @@
 		 		</div>
 		 	</div>
 		 </div>
+		</div>
 		 <div class="modal fade " id="modalEditText" role="dialog">
                     <div class="modal-dialog">
 
@@ -399,6 +382,11 @@
 
     ?>
     <script type="text/javascript">
+    	jQuery.fn.stripTags = function() {
+		    return this.replaceWith( this.html().replace(/<\/?[^>]+>/gi, '') );
+		};
+
+
     	<?php 
 
     		if(isset($_GET['to']) && isset($_SESSION['uid'])){
@@ -420,6 +408,23 @@
 		  $(img).hide();
 		 }
 		});
+
+    	$('.carousel-text').each(function(){
+
+		 if($(this).find('img').length > 0)
+		 {
+		  var img = $(this).find('img');
+		  //$(this).css('background-color','yellow');
+		    //$(this).css('background-image','url(' + imgSrc + ')');
+		    //$(this).hide();
+		  $(img).hide();
+		 }
+
+		 //$(this).stripTags();
+		});
+
+
+		
     	
     </script>
 </body>

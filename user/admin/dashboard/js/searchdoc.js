@@ -1,4 +1,4 @@
-$("#btn-search").click(function(){
+/*$("#btn-search").click(function(){
 	//alert("k");
 	var searchkey = $("#search-key").val();
 	//alert(searchkey);
@@ -13,10 +13,10 @@ $("#btn-search").click(function(){
 			//alert(data);
 			//$("#debug").html(data);
 		}
-	});*/
+	});
 	window.location.replace("admindashboard.php?search="+searchkey);
 
-})
+})*/
 
 $("#viewall").click(function(){
 	//alert(this.name);

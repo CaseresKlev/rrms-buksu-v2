@@ -46,30 +46,3 @@ window.onclick = function(event) {
 });
 
 
-$("#btn-search-home").click(function(){
-	var skey = $("#skey").val();
-	//alert("h");
-	//var filterdate = $("#filterdate").val(); 
-	//var by = "";
-
-
-
-	//alert("Please provide terms to search");
-
-	/*	if($('#search_title').is(':checked')){
-		//alert("searct");
-		by = "title";
-		
-		
-	}else if($('#search_kw').is(':checked')){
-		by = "kw";
-	} */
-
-
-	//var search = "" + skey + "-" + by + "-" + filterdate;
-
-	window.location.replace("searchcontent.php?search="+skey);
-
-	
-	
-});

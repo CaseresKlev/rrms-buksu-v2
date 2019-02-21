@@ -8,6 +8,22 @@ body {
     background: #fafafa;
 }
 
+.border-left-warning{
+    border-left: 6px solid orange !important;
+}
+
+.border-left-danger{
+    border-left: 6px solid red !important;
+}
+
+.border-left-info{
+    border-left: 6px solid blue !important;
+}
+
+.border-left-success{
+    border-left: 6px solid green !important;
+}
+
 .table-details{
     font-size: 11pt;
     font-style: italic;

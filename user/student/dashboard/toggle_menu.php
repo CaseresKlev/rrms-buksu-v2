@@ -17,8 +17,8 @@
                             <li class="nav-item">
                                 <!--<i class="fas fa-bell fa-3x nav-link"></i>-->
                                 <a class="nav-link viewNotification" href="#" onclick="showDetailedNotification()">
-                                      <i class="fas fa-bell fa-lg"></i> 
-                                       Notification
+                                      <i class="fas fa-user-friends fa-lg"></i> 
+                                       Author Request
                                           <?php  
                                             $stmt = $con->prepare('SELECT `id`, `action`, on_update_author.`book_id`, book.book_title, CONCAT(author.a_fname, " ", SUBSTRING(author.a_mname, 1,1), ". ", author.a_lname, " ", author.a_suffix ) as referer FROM `on_update_author` INNER JOIN book on book.book_id = on_update_author.book_id INNER JOIN author on author.a_id = referer WHERE `author` = ?');
                                             $stmt->bind_param("i", $_SESSION['owner']);
@@ -35,6 +35,30 @@
                                 <!--<div class="badge badge-success">
                                     You have new notification
                                 </div>-->
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="<?php echo PROJECT_ROOT . 'user/student/dashboard/push_notification/' ?>"><i class="fas fa-bell fa-lg"></i>&nbsp; Notification
+
+                                    <?php
+
+                                        $con2 = $dbconfig ->getCon();
+                                        $stmt101 = $con2->prepare("SELECT COUNT(`id`) as 'count' FROM `push_notification` WHERE `receiver` = ? and seen = 0");
+                                        $stmt101->bind_param("i", $_SESSION['owner']);
+                                        if($stmt101->execute()){
+                                            $res = $stmt101->get_result();
+                                            $row = $res->fetch_assoc();
+                                            if($row['count']>0){
+                                                echo '<span class="badge badge-danger">'. $row['count'] .'</span>';
+                                            }
+                                        }
+                                        
+                                        
+
+                                    ?>
+
+
+
+                                </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="<?php echo PROJECT_ROOT . "logout.php"?>"><i class="fas fa-sign-out-alt fa-lg"></i>&nbsp;Log out</a>

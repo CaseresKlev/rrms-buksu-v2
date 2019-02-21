@@ -1,7 +1,8 @@
 <?php
-	
+	$currentDIR = "";
 	session_start();
   	$cur = "post";
+    $loaded = false;
 
   	  if(isset($_SESSION['uid'])){
     //print_r($_SESSION);
@@ -223,6 +224,6 @@
     </script>
 
     <script src="js/searchdoc.js"></script>
-    <script>var editor = new Jodit('#editor');</script>
+    
     <script src="js/banner.js"></script>
 </body>

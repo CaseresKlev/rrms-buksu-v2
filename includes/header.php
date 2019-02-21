@@ -63,7 +63,7 @@ if it's not present, don't show loader */
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Researches
         </a>
-        <div class="dropdown-menu " aria-labelledby="navbarDropdown">
+        <div class="dropdown-menu" id="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="<?php echo PROJECT_ROOT . "research/?filter=all" ?>">All</a>
         	<a class="dropdown-item" href="<?php echo PROJECT_ROOT . "research/?filter=instructor" ?>">Instructor Research</a>
         	<a class="dropdown-item" href="<?php echo PROJECT_ROOT . "research/?filter=student" ?>">Student Research</a>
@@ -71,7 +71,7 @@ if it's not present, don't show loader */
        
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="http://research.buksu.edu.ph/index.php">BukSU Journal</a>
+        <a class="nav-link" href="http://research.buksu.edu.ph/index.php" target="_blank">BukSU Journal</a>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto">
@@ -128,11 +128,31 @@ if it's not present, don't show loader */
 <script>
   
       $(window).on('load', function () {
-      //alert("Window Loaded");
-      // Animate loader off screen
-      jQuery(".se-pre-con").hide();
-      //$(".se-pre-con").fadeOut("slow");
- });
+            //alert("Window Loaded");
+            // Animate loader off screen
+            jQuery(".se-pre-con").hide();
+            //$(".se-pre-con").fadeOut("slow");
+       });
+
+      $('#navbarDropdown').on('mouseover', function(e) {
+        //alert("h");
+          $(e.target).dropdown('toggle');
+      });
+
+      $('#dropdown-menu').on('mouseout', function(){
+        //$(this).dropdown('togg')
+      })
+
+      
+
+
+      $('#btn-search-home').click(function(){
+        var k = $('#skey').val();
+        //alert(k);
+
+
+        window.location.replace("<?php echo PROJECT_ROOT . 'search/?k='?>" +k);
+      })
 </script>
 
 <!--<div id="wrapper" class="animate">

@@ -10,6 +10,7 @@ if(isset($_POST['util-book_id']) && isset($_GET['action'])){
         $action = $_GET['action'];
 
         //echo "$action";
+        //exit();
         $error = 0;
         $error2 = 0;
 		
@@ -45,15 +46,34 @@ if(isset($_POST['util-book_id']) && isset($_GET['action'])){
 
                 $fileext = explode(".",$file_name);
                 $extension = strtolower(end($fileext));
-                $finalname = "documents/" . uniqid('',true) . "." . $extension;
-                if(move_uploaded_file($fileTemp, $finalname)){
+
+                include($_SERVER["DOCUMENT_ROOT"] . "/rrms-buksu/includes/path.php");
+                $finalLocation = $_SERVER['DOCUMENT_ROOT'] . PROJECT_FOLDER;
+
+                $finalname = uniqid('',true) . "." . $extension;
+                $aut_type = "admin";
+
+                $replaced = preg_replace("/[^a-zA-Z]/", "-", $orgname);
+                $dbloc = "revisions/" . $aut_type . "/". date('Y') . "/" . $replaced . "/";
+                $finalLocation .= $dbloc;
+
+                if(!checkPath($finalLocation)){
+                  mkdir($finalLocation,  0777, true);
+                }
+
+                if(move_uploaded_file($fileTemp, $finalLocation . $finalname)){
 
                     include_once 'connection.php';
                     $dbconfig = new dbconfig();
                     $conn = $dbconfig->getCon();
-                    $query = "INSERT INTO `documents` (`id`, `book_id`, `documents`, `orig_name`) VALUES (NULL, '$book_id', '$finalname', '$file_name')";
+                    $query = "INSERT INTO `documents` (`id`, `book_id`, `documents`, `orig_name`, `submitted_by`, `description`, `date`) VALUES (NULL, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
                     //echo $query;
-                    $result = $conn->query($query);
+                    $desc = "Supporting document for Utilization.";
+                    $stmt = $conn->prepare($query);
+                    $linkFile = $dbloc . $finalname;
+                    $stmt->bind_param("issss", $book_id, $linkFile, $file_name, $aut_type, $desc);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
 
                     
 
@@ -164,6 +184,15 @@ if(isset($_POST['action']) && $_GET['util_id']){
         }
     } 
 }
+function checkPath($path) {
+//echo $path;
+  if (is_dir($path)){
+    //echo "Dir excist";
+    return true;  
+  } else{
+    return false;
+  }
 
+}
 
 ?>

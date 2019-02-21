@@ -19,12 +19,12 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-	<div class="container">
+	<div class="container" id="login">
 		<div class="row error-msg">
 			Your Username and password is not correct! Try again.
 		</div>
 	</div>
-		<div class="form-group login-form">
+		<div class="form-group login-form" >
 			<div class="container">
 				<div class="row form-header" >
 					<b>BukSU-RRMS</b>
@@ -36,7 +36,7 @@
 				</div>
 			</div>
 			
-				<form style="padding: 10px;">		
+				<form style="padding: 10px;" >		
 					<div class="form-group">
 					    <label for="exampleInputEmail1">Username</label>
 					    <input type="text" class="form-control" id="u_name" aria-describedby="emailHelp" placeholder="Enter username">
@@ -79,7 +79,12 @@
       </script>
 	
 	<script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <script type="text/javascript" src="js/bootstrap.min-4.1.0.js"></script>
     <script type="text/javascript" src="js/login.js"></script>
+    <script type="text/javascript">
+    	
+    </script>
+
 </body>
 </html>

@@ -1,5 +1,7 @@
 <?php
+$currentDIR = "";
   $cur = "research";
+  $loaded = false;
   session_start();
   $book_id ="";
   $book_title = "";
@@ -87,6 +89,13 @@
 </head>
 <body>
 	<div class="wrapper">
+                <?php
+                  $stmt = $con->prepare("UPDATE `push_notification` SET `seen` = '1' WHERE bookid = ? and receiver = ? and trail = ?");
+                  $stmt->bind_param("iis", $book_id, $_SESSION['owner'], $trail_id);
+                  
+                  $stmt->execute()
+
+                ?>
         <!-- Sidebar  -->
         <?php include 'sidebar.php'; ?>
 

@@ -1,6 +1,7 @@
 <?php
-	
+	$currentDIR = "";
 	session_start();
+    $loaded = false;
   	$cur = "post";
 
   	  if(isset($_SESSION['uid'])){

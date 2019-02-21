@@ -46,7 +46,7 @@ if(isset($_SESSION['uid']) && $_SESSION['type'] === "INSTRUCTOR"){
   	$stmt->bind_param("is", $insertedID, $stemp);
   	$stmt->execute();
     
-  	print_r($stmt);
+  	//print_r($stmt);
   	
   	$stmt->prepare("INSERT INTO `paper_trail` (`id`, `book_id`, `p_sat_id`, `file_loc`, `requirements`, `isdone`, `date`) VALUES (NULL, ?, '1', '', '1', '1', CURRENT_TIMESTAMP)");
   	$stmt->bind_param("i", $insertedID);
